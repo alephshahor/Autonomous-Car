@@ -13,18 +13,22 @@ autonomousCar::autonomousCar(std::pair<int,int> dimension, std::pair<int,int> po
 
 void autonomousCar::moveRight(){
     position.first += 1;
+    carDrawable.setPosition(position.first * dimension.first, position.second * dimension.second);
 }
 
 void autonomousCar::moveLeft(){
     position.first -= 1;
+    carDrawable.setPosition(position.first * dimension.first, position.second * dimension.second);
 }
 
 void autonomousCar::moveUp(){
-    position.second += 1;
+    position.second -= 1;
+    carDrawable.setPosition(position.first * dimension.first, position.second * dimension.second);
 }
 
 void autonomousCar::moveDown(){
-    position.second -= 1;
+    position.second += 1;
+    carDrawable.setPosition(position.first * dimension.first, position.second * dimension.second);
 }
 
 void autonomousCar::draw(sf::RenderTarget& target, sf::RenderStates states) const{

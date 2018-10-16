@@ -9,8 +9,8 @@ int main(){
 
 
 sf::RenderWindow window(sf::VideoMode(480,480), "Autonomous Car", sf::Style::Close);
-Field simulationField(480,480,10.0f);
-std::pair<int,int> carDimension = std::make_pair(10,10);
+Field simulationField(480,480,20.0f);
+std::pair<int,int> carDimension = std::make_pair(20,20);
 std::pair<int,int> carPosition = std::make_pair(10,10);
 autonomousCar ferrari(carDimension, carPosition);
 
@@ -28,6 +28,19 @@ while (running){
       case sf::Event::MouseButtonPressed:
              if (evnt.mouseButton.button == sf::Mouse::Left)
              simulationField.changeCellState(evnt.mouseButton.x, evnt.mouseButton.y, Obstacle);
+             break;
+      case sf::Event::KeyPressed:
+             if (evnt.key.code == sf::Keyboard::Escape)
+               running = false;
+             if (evnt.key.code == sf::Keyboard::D)
+               ferrari.moveRight();
+             if (evnt.key.code == sf::Keyboard::A)
+               ferrari.moveLeft();
+             if (evnt.key.code == sf::Keyboard::W)
+               ferrari.moveUp();
+             if (evnt.key.code == sf::Keyboard::S)
+               ferrari.moveDown();
+
              break;
     }
 

@@ -9,7 +9,7 @@ Field::Field(int width, int height, float cellSize):
          for (int i = 0; i < width / cellSize; i++){
              std::vector<Cell> vCells;
              for (int j = 0; j < height / cellSize; j++){
-               vCells.push_back(Cell(cellSize,10.0f*i, 10.0f*j));
+               vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j));
              }
                vectorOfCells.push_back(vCells);
          }
@@ -31,7 +31,7 @@ Field::Field(std::pair<int,int> fieldDimension, float cellSize):
           for (int i = 0; i < fieldDimension.first / cellSize; i++){
               std::vector<Cell> vCells;
               for (int j = 0; j < fieldDimension.second / cellSize; j++){
-                vCells.push_back(Cell(cellSize,10.0f*i, 10.0f*j));
+                vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j));
               }
                 vectorOfCells.push_back(vCells);
           }
