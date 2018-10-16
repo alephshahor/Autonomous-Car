@@ -6,16 +6,16 @@ Field::Field(int width, int height, float cellSize):
        fieldDimension(std::make_pair(width,height))
        {
 
-         for (int i = 0; i < height / cellSize; i++){
+         for (int i = 0; i < width / cellSize; i++){
              std::vector<Cell> vCells;
-             for (int j = 0; j < width / cellSize; j++){
-               vCells.push_back(Cell(cellSize,10.0f*j, 10.0f*i));
+             for (int j = 0; j < height / cellSize; j++){
+               vCells.push_back(Cell(cellSize,10.0f*i, 10.0f*j));
              }
                vectorOfCells.push_back(vCells);
          }
 
-         for (int i = 0; i < height / cellSize; i++){
-             for (int j = 0; j < width / cellSize; j++){
+         for (int i = 0; i < width / cellSize; i++){
+             for (int j = 0; j < height / cellSize; j++){
                vectorOfCells[i][j].setTexture(Empty);
              }
          }
@@ -28,10 +28,10 @@ Field::Field(std::pair<int,int> fieldDimension, float cellSize):
         fieldDimension(fieldDimension)
         {
 
-          for (int i = 0; i < fieldDimension.second / cellSize; i++){
+          for (int i = 0; i < fieldDimension.first / cellSize; i++){
               std::vector<Cell> vCells;
-              for (int j = 0; j < fieldDimension.first / cellSize; j++){
-                vCells.push_back(Cell(cellSize,10.0f*j, 10.0f*i));
+              for (int j = 0; j < fieldDimension.second / cellSize; j++){
+                vCells.push_back(Cell(cellSize,10.0f*i, 10.0f*j));
               }
                 vectorOfCells.push_back(vCells);
           }
@@ -39,8 +39,8 @@ Field::Field(std::pair<int,int> fieldDimension, float cellSize):
           /* This is necessary because when you use push_back you're actually
           creating a copy of the object you're inserting so you lose the
           texture reference*/
-          for (int i = 0; i < fieldDimension.second / cellSize; i++){
-              for (int j = 0; j < fieldDimension.first / cellSize; j++){
+          for (int i = 0; i < fieldDimension.first / cellSize; i++){
+              for (int j = 0; j < fieldDimension.second / cellSize; j++){
                 vectorOfCells[i][j].setTexture(Empty);
               }
           }
@@ -49,7 +49,7 @@ Field::Field(std::pair<int,int> fieldDimension, float cellSize):
         }
 
 Cell Field::getCell(int posX, int posY){
-        return vectorOfCells[posY][posX];
+        return vectorOfCells[posX][posY];
 }
 
 int Field::getWidth(){
@@ -65,5 +65,5 @@ void Field::changeCellState(int posX, int posY, cellObjects cellObject){
     posX /= cellSize;
     posY /= cellSize;
 
-    vectorOfCells[posY][posX].setTexture(cellObject);
+    vectorOfCells[posX][posY].setTexture(cellObject);
 }

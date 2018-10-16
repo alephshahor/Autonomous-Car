@@ -2,6 +2,9 @@
 #include <iostream>
 #include "cell.hpp"
 
+
+// Consider the field border as non available space to access.
+
 class Field{
 
   private:
