@@ -9,7 +9,7 @@ Field::Field(int width, int height, float cellSize):
          for (int i = 0; i < width / cellSize; i++){
              std::vector<Cell> vCells;
              for (int j = 0; j < height / cellSize; j++){
-               vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j));
+               vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j, false));
              }
                vectorOfCells.push_back(vCells);
          }
@@ -31,7 +31,7 @@ Field::Field(std::pair<int,int> fieldDimension, float cellSize):
           for (int i = 0; i < fieldDimension.first / cellSize; i++){
               std::vector<Cell> vCells;
               for (int j = 0; j < fieldDimension.second / cellSize; j++){
-                vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j));
+                vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j, false));
               }
                 vectorOfCells.push_back(vCells);
           }
@@ -60,10 +60,16 @@ int Field::getHeight(){
   return fieldDimension.second / cellSize;
 }
 
-void Field::changeCellState(int posX, int posY, cellObjects cellObject){
+void Field::changeCellState(int posX, int posY){
 
     posX /= cellSize;
     posY /= cellSize;
 
-    vectorOfCells[posX][posY].setTexture(cellObject);
+    if (!vectorOfCells[posX][posY].isOccupied()){
+        vectorOfCells[posX][posY].occupy();
+        vectorOfCells[posX][posY].setTexture(Empty);
+    }else{
+        vectorOfCells[posX][posY].release();
+        vectorOfCells[posX][posY].setTexture(Obstacle);
+      }
 }

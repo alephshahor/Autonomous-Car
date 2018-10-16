@@ -1,7 +1,7 @@
 #include "cell.hpp"
 
 
-Cell::Cell(float cellSize, std::pair<int,int> position):
+Cell::Cell(float cellSize, std::pair<int,int> position, bool occupied = false):
       cellSize(cellSize),
       position(position)
       {
@@ -11,7 +11,7 @@ Cell::Cell(float cellSize, std::pair<int,int> position):
         cellDrawable.setPosition(position.first, position.second);
       }
 
-Cell::Cell(float cellSize, int posX, int posY){
+Cell::Cell(float cellSize, int posX, int posY, bool occupied = false){
       this -> cellSize = cellSize;
       position = std::make_pair(posX, posY);
 
@@ -34,22 +34,9 @@ void Cell::setPosition(std::pair<int,int> position){
 
 void Cell::setTexture(cellObjects cellObject){
 
-  switch(cellObject){
-    case 0:
-    cellDrawable.setTexture(&whiteSquare);
-    break;
-
-    case 1:
+    if (occupied)
     cellDrawable.setTexture(&blackSquare);
-    break;
-
-    case 2:
-    break;
-
-    default:
-    break;
-
-  }
+    else cellDrawable.setTexture(&whiteSquare);
 
 }
 
@@ -57,6 +44,17 @@ std::pair<int,int> Cell::getPosition(){
     return position;
 }
 
+bool Cell::isOccupied(){
+     return occupied;
+}
+
+void Cell::occupy(){
+     occupied = true;
+}
+
+void Cell::release(){
+     occupied = false;
+}
 
 void Cell::draw(sf::RenderTarget& target, sf::RenderStates states) const{
     target.draw(cellDrawable);

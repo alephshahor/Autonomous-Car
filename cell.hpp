@@ -13,6 +13,8 @@ class Cell : public sf::Drawable{
     sf::Texture whiteSquare;
     sf::Texture blackSquare;
 
+    bool occupied;
+
     // This function allows us to draw the cell using a nicer syntax
     // window.draw(cell) instead of cell.draw(window).
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
@@ -21,13 +23,15 @@ class Cell : public sf::Drawable{
 
     // Constructors
 
-    Cell(float cellSize, std::pair<int,int> position);
-    Cell(float cellSize, int posX, int posY);
+    Cell(float cellSize, std::pair<int,int> position, bool occupied);
+    Cell(float cellSize, int posX, int posY, bool occupied);
 
     // Setters
 
     void setPosition(int posX, int posY);
     void setPosition(std::pair<int,int> position);
+    void occupy();
+    void release();
 
     // Getters
 
@@ -37,6 +41,8 @@ class Cell : public sf::Drawable{
     // This function sets the correspond texture depending on whether the
     // cell is dead or alive.
     void setTexture(cellObjects cellObject);
+
+    bool isOccupied();
 
 
 };

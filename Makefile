@@ -4,16 +4,16 @@ RM = rm -f
 FLAGS = -lsfml-graphics -lsfml-window -lsfml-system -o
 
 
-AutonomousCar: cell.o field.o car.o sensor.o main.o
-					$(CXX) cell.o field.o car.o sensor.o main.o $(FLAGS) AutonomousCar
+AutonomousCar: cell.o field.o sensor.o car.o main.o
+					$(CXX) cell.o field.o sensor.o car.o main.o $(FLAGS) AutonomousCar
 
 cell.o: cell.cpp cell.hpp
 
 field.o: field.cpp field.hpp
 
-car.o: car.hpp car.cpp
-
 sensor.o: sensor.hpp sensor.cpp
+
+car.o: car.hpp car.cpp
 
 main.o: main.cpp
 

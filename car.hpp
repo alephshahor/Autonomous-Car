@@ -2,6 +2,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "sensor.hpp"
+#include "field.hpp"
 #include "common.hpp"
 
 class autonomousCar : public sf::Drawable {
@@ -24,6 +25,11 @@ class autonomousCar : public sf::Drawable {
         void moveLeft();
         void moveUp();
         void moveDown();
+
+        bool checkUpwardsCollision(Field simulationField);
+        bool checkBackwardsCollision(Field simulationField);
+        bool checkRightCollision(Field simulationField);
+        bool checkLeftCollision(Field simulationField);
 
         std::pair<int,int> getPosition();
 

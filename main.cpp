@@ -27,18 +27,18 @@ while (running){
            break;
       case sf::Event::MouseButtonPressed:
              if (evnt.mouseButton.button == sf::Mouse::Left)
-             simulationField.changeCellState(evnt.mouseButton.x, evnt.mouseButton.y, Obstacle);
+             simulationField.changeCellState(evnt.mouseButton.x, evnt.mouseButton.y);
              break;
       case sf::Event::KeyPressed:
              if (evnt.key.code == sf::Keyboard::Escape)
                running = false;
-             if (evnt.key.code == sf::Keyboard::D)
+             if (evnt.key.code == sf::Keyboard::D && !ferrari.checkRightCollision(simulationField))
                ferrari.moveRight();
-             if (evnt.key.code == sf::Keyboard::A)
+             if (evnt.key.code == sf::Keyboard::A && !ferrari.checkLeftCollision(simulationField))
                ferrari.moveLeft();
-             if (evnt.key.code == sf::Keyboard::W)
+             if (evnt.key.code == sf::Keyboard::W && !ferrari.checkUpwardsCollision(simulationField))
                ferrari.moveUp();
-             if (evnt.key.code == sf::Keyboard::S)
+             if (evnt.key.code == sf::Keyboard::S && !ferrari.checkBackwardsCollision(simulationField))
                ferrari.moveDown();
 
              break;

@@ -26,8 +26,7 @@ class Field{
         int getHeight();
 
         //  This function changes the cell from dead to alive and vice versa
-        void changeCellState(int posX, int posY, cellObjects cellObject);
-
+        void changeCellState(int posX, int posY);
 
 
 
