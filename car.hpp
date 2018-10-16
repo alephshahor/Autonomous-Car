@@ -4,7 +4,7 @@
 #include "sensor.hpp"
 #include "common.hpp"
 
-class Car : public sf::Drawable{
+class autonomousCar : public sf::Drawable {
 
 
     private:
@@ -19,7 +19,7 @@ class Car : public sf::Drawable{
 
       public:
 
-        Car(std::pair<int,int> dimension, std::pair<int,int> position);
+        autonomousCar(std::pair<int,int> dimension, std::pair<int,int> position);
         void moveRight();
         void moveLeft();
         void moveUp();

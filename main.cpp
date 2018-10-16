@@ -12,7 +12,7 @@ sf::RenderWindow window(sf::VideoMode(480,480), "Autonomous Car", sf::Style::Clo
 Field simulationField(480,480,10.0f);
 std::pair<int,int> carDimension = std::make_pair(10,10);
 std::pair<int,int> carPosition = std::make_pair(10,10);
-Car ferrari(carDimension, carPosition);
+autonomousCar ferrari(carDimension, carPosition);
 
 bool running = true;
 
@@ -39,7 +39,7 @@ while (running){
     for (int j = 0; j < simulationField.getHeight(); j++){
       window.draw(simulationField.getCell(i,j));
       if ((i == carPos.first) && (j == carPos.second))
-           ferrari.draw();
+           window.draw(ferrari);
     }
   }
 
