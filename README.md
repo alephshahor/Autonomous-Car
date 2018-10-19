@@ -1,6 +1,6 @@
 # Autonomous Car
 
-Loren ipsun dolor sit amet
+Text goes here
 
 
-This program uses [SFML library](http://sfml.org)
+This program uses [SFML libraries](https://www.sfml-dev.org)
