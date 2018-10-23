@@ -10,7 +10,12 @@ Field::Field(int width, int height, float cellSize):
              std::vector<Cell> vCells;
              for (int j = 0; j < height / cellSize; j++){
                vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j, false));
-             }
+               // Random obstacle field generator
+               int occupied = rand() % 2;
+                if (occupied == 1) {
+                  vCells.back().occupy();
+                }
+              }
                vectorOfCells.push_back(vCells);
          }
 
@@ -32,6 +37,11 @@ Field::Field(std::pair<int,int> fieldDimension, float cellSize):
               std::vector<Cell> vCells;
               for (int j = 0; j < fieldDimension.second / cellSize; j++){
                 vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j, false));
+                // Random obstacle field generator
+                int occupied = rand() % 2;
+                if (occupied == 1) {
+                  vCells.back().occupy();
+                }
               }
                 vectorOfCells.push_back(vCells);
           }

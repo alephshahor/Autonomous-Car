@@ -8,8 +8,8 @@
 int main(){
 
 
-sf::RenderWindow window(sf::VideoMode(480,480), "Autonomous Car", sf::Style::Close);
-Field simulationField(480,480,20.0f);
+sf::RenderWindow window(sf::VideoMode(640,640), "Autonomous Car", sf::Style::Close);
+Field simulationField(640,640,20.0f);
 std::pair<int,int> carDimension = std::make_pair(20,20);
 std::pair<int,int> carPosition = std::make_pair(10,10);
 autonomousCar ferrari(carDimension, carPosition);
