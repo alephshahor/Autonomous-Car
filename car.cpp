@@ -5,7 +5,7 @@ autonomousCar::autonomousCar(std::pair<int,int> dimension, std::pair<int,int> po
         dimension(dimension),
         position(position)
         {
-          carTexture.loadFromFile("./art/redTexture_.jpeg");
+          carTexture.loadFromFile("./art/car.png");
           carDrawable.setSize(sf::Vector2f(dimension.first, dimension.second));
           carDrawable.setPosition(position.first * dimension.first, position.second * dimension.second);
           carDrawable.setTexture(&carTexture);
