@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <vector>
 #include "common.hpp"
 
 class Cell : public sf::Drawable{
@@ -12,6 +13,8 @@ class Cell : public sf::Drawable{
     sf::RectangleShape cellDrawable;
     sf::Texture whiteSquare;
     sf::Texture blackSquare;
+    sf::Texture goalSquare;
+    std::vector <sf::Texture> textureVector;
     cellObjects cellType;
 
     bool occupied;
@@ -24,8 +27,8 @@ class Cell : public sf::Drawable{
 
     // Constructors
 
-    Cell(float cellSize, std::pair<int,int> position, bool occupied);
-    Cell(float cellSize, int posX, int posY, bool occupied);
+    Cell(float cellSize, std::pair<int,int> position,  cellObjects cellType,  bool occupied);
+    Cell(float cellSize, int posX, int posY,  cellObjects cellType,  bool occupied);
 
     // Setters
 

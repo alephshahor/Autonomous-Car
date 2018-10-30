@@ -8,8 +8,8 @@
 int main(){
 
 
-sf::RenderWindow window(sf::VideoMode(640,640), "Autonomous Car", sf::Style::Close);
-Field simulationField(640,640,20.0f);
+sf::RenderWindow window(sf::VideoMode(500,500), "Autonomous Car", sf::Style::Close);
+Field simulationField(500,400,20.0f);
 std::pair<int,int> carDimension = std::make_pair(20,20);
 std::pair<int,int> carPosition = std::make_pair(10,10);
 autonomousCar ferrari(carDimension, carPosition);
@@ -30,6 +30,7 @@ while (running){
              simulationField.changeCellState(evnt.mouseButton.x, evnt.mouseButton.y);
              break;
       case sf::Event::KeyPressed:
+             std::cout << evnt.key.code << "\n";
              if (evnt.key.code == sf::Keyboard::Escape)
                running = false;
              if (evnt.key.code == sf::Keyboard::D && !ferrari.checkRightCollision(simulationField))

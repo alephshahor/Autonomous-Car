@@ -9,12 +9,7 @@ Field::Field(int width, int height, float cellSize):
          for (int i = 0; i < width / cellSize; i++){
              std::vector<Cell> vCells;
              for (int j = 0; j < height / cellSize; j++){
-               vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j, false));
-               // Random obstacle field generator
-               int occupied = rand() % 2;
-                if (occupied == 1) {
-                  vCells.back().occupy();
-                }
+               vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j, Empty, false));
               }
                vectorOfCells.push_back(vCells);
          }
@@ -36,12 +31,7 @@ Field::Field(std::pair<int,int> fieldDimension, float cellSize):
           for (int i = 0; i < fieldDimension.first / cellSize; i++){
               std::vector<Cell> vCells;
               for (int j = 0; j < fieldDimension.second / cellSize; j++){
-                vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j, false));
-                // Random obstacle field generator
-                int occupied = rand() % 2;
-                if (occupied == 1) {
-                  vCells.back().occupy();
-                }
+                vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j, Empty, false));
               }
                 vectorOfCells.push_back(vCells);
           }
@@ -77,9 +67,9 @@ void Field::changeCellState(int posX, int posY){
 
     if (!vectorOfCells[posX][posY].isOccupied()){
         vectorOfCells[posX][posY].occupy();
-        vectorOfCells[posX][posY].setTexture(Empty);
+        vectorOfCells[posX][posY].setTexture(Obstacle);
     }else{
         vectorOfCells[posX][posY].release();
-        vectorOfCells[posX][posY].setTexture(Obstacle);
+        vectorOfCells[posX][posY].setTexture(Empty);
       }
 }

@@ -1,22 +1,26 @@
 #include "cell.hpp"
 
 
-Cell::Cell(float cellSize, std::pair<int,int> position, bool occupied = false):
+Cell::Cell(float cellSize, std::pair<int,int> position, cellObjects cellType, bool occupied = false):
       cellSize(cellSize),
-      position(position)
+      position(position),
+      cellType(cellType)
       {
         blackSquare.loadFromFile("./art/black.png");
         whiteSquare.loadFromFile("./art/white.png");
+        goalSquare.loadFromFile("./art/goal.png");
         cellDrawable.setSize(sf::Vector2f(cellSize,cellSize));
         cellDrawable.setPosition(position.first, position.second);
       }
 
-Cell::Cell(float cellSize, int posX, int posY, bool occupied = false){
+Cell::Cell(float cellSize, int posX, int posY, cellObjects cellType,  bool occupied = false){
       this -> cellSize = cellSize;
+      this -> cellType = cellType;
       position = std::make_pair(posX, posY);
 
       blackSquare.loadFromFile("./art/black.png");
       whiteSquare.loadFromFile("./art/white.png");
+      goalSquare.loadFromFile("./art/goal.png");
       cellDrawable.setSize(sf::Vector2f(cellSize,cellSize));
       cellDrawable.setPosition(posX, posY);
 }
@@ -34,9 +38,22 @@ void Cell::setPosition(std::pair<int,int> position){
 
 void Cell::setTexture(cellObjects cellObject){
 
-    if (occupied)
-    cellDrawable.setTexture(&blackSquare);
-    else cellDrawable.setTexture(&whiteSquare);
+    switch(cellObject){
+
+      case 0:
+      cellDrawable.setTexture(&whiteSquare);
+      break;
+
+      case 1:
+      cellDrawable.setTexture(&blackSquare);
+      break;
+
+      default:
+      std::cerr << "Error estableciendo la textura\n";
+      break;
+
+    }
+
 
 }
 
