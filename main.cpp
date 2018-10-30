@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <math.h>
 #include "cell.hpp"
 #include "field.hpp"
 #include "common.hpp"
@@ -8,10 +9,25 @@
 #include "initialScreen.hpp"
 #include "simulationScreen.hpp"
 
+
 int main(){
 
+int posX, posY;
+std::cout << "Introduce field X-AXIS dimension: ";
+std::cin >> posX;
+std::cout << "Y-AXIS dimension: ";
+std::cin >> posY;
 
-sf::RenderWindow window(sf::VideoMode(500,500), "Autonomous Car", sf::Style::Close);
+posX *= 20;
+posY *= 20;
+
+ceil(posX);
+ceil(posY);
+
+setFieldDimension(posX, posY);
+
+
+sf::RenderWindow window(sf::VideoMode(posX,posY), "Autonomous Car", sf::Style::Close);
 
 std::vector<cScreen*> Screens;
 
