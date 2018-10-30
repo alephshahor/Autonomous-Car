@@ -6,6 +6,7 @@ Cell::Cell(float cellSize, std::pair<int,int> position, cellObjects cellType, bo
       position(position),
       cellType(cellType)
       {
+        std::cout << "CONSTRUCTING\n";
         blackSquare.loadFromFile("./art/black.png");
         whiteSquare.loadFromFile("./art/white.png");
         goalSquare.loadFromFile("./art/goal.png");
@@ -46,6 +47,10 @@ void Cell::setTexture(cellObjects cellObject){
 
       case 1:
       cellDrawable.setTexture(&blackSquare);
+      break;
+
+      case 2:
+      cellDrawable.setTexture(&goalSquare);
       break;
 
       default:
