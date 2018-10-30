@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "cell.hpp"
+#include "goal.hpp"
 
 
 // Consider the field border as non available space to access.

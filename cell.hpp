@@ -12,6 +12,7 @@ class Cell : public sf::Drawable{
     sf::RectangleShape cellDrawable;
     sf::Texture whiteSquare;
     sf::Texture blackSquare;
+    cellObjects cellType;
 
     bool occupied;
 
