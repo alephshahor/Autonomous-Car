@@ -2,7 +2,7 @@
 
 int simulationScreen::Run(sf::RenderWindow& window){
 
-Field simulationField(fieldDimension.first,fieldDimension.second,20.0f);
+Field simulationField(fieldDimension.first - 40,fieldDimension.second,20.0f);
 std::pair<int,int> carDimension = std::make_pair(20,20);
 std::pair<int,int> carPosition = std::make_pair(10,10);
 autonomousCar ferrari(carDimension, carPosition);

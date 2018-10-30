@@ -6,7 +6,6 @@ Cell::Cell(float cellSize, std::pair<int,int> position, cellObjects cellType, bo
       position(position),
       cellType(cellType)
       {
-        std::cout << "CONSTRUCTING\n";
         blackSquare.loadFromFile("./art/black.png");
         whiteSquare.loadFromFile("./art/white.png");
         goalSquare.loadFromFile("./art/goal.png");
