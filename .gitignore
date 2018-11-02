@@ -1,4 +1,8 @@
+# Ignore build dir
+build
+
+# Ignore any executables
+bin/*
+
 .DS_Store
-*.o
-AutonomousCar
 .vscode

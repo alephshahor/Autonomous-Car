@@ -1,25 +1,33 @@
-CC = gcc
+
+TARGET = AutonomousCar
+
+SRC = src
+INC = include
+BIN = bin
+FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+CFLAGS = -std=c++11 -I$(INC)
+
+SOURCE = $(wildcard $(SRC)/*.cpp)
+OBJECT = $(patsubst %, $(BIN)/% ,$(notdir $(SOURCE:.cpp=.o)))
+
 CXX = g++
-RM = rm -f
-FLAGS = -lsfml-graphics -lsfml-window -lsfml-system -o
 
+$(BIN)/$(TARGET) : $(OBJECT)
+				$(CXX) -o $@ $^ $(FLAGS)
 
-AutonomousCar: cell.o field.o goal.o sensor.o car.o common.o simulationScreen.o main.o
-					$(CXX) cell.o field.o goal.o sensor.o car.o common.o simulationScreen.o main.o $(FLAGS) AutonomousCar
+# -c "Compile but not link"
+$(BIN)/%.o : $(SRC)/%.cpp
+				$(CXX) $(CFLAGS) -c $< -o $@
 
-cell.o: cell.cpp cell.hpp
+.PHONY: help run clean
 
-field.o: field.cpp field.hpp
-
-sensor.o: sensor.hpp sensor.cpp
-
-car.o: car.hpp car.cpp
-
-main.o: main.cpp
-
-simulationScreen.o: simulationScreen.hpp simulationScreen.cpp
-
-common.o: common.hpp common.cpp
+run : $(BIN)/$(TARGET)
+				$(BIN)/$(TARGET)
 
 clean:
-	$(RM) AutonomousCar cell.o field.o car.o sensor.o common.o simulationScreen.o main.o
+		rm -f $(OBJECT) $(BIN)/$(TARGET)
+
+
+help:
+		@echo "src: $(SOURCE)"
+		@echo "obj: $(OBJECT)"
