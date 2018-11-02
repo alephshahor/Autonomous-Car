@@ -2,10 +2,9 @@
 
 Node::Node(std::pair<int,int> position, Node* nodeParent):
       position(position),
-      nodeParent(nodeParent)
-      {
-        std::cout << "Node created\n";
-      }
+      nodeParent(nodeParent),
+      nodeChilds()
+      {}
 
 std::pair<int,int> Node::getPosition(){
     return position;
@@ -46,6 +45,9 @@ void Node::printDescendents(){
       std::cout << "Pos X: " << nodeChilds[i] -> getPosition().first << " Pos Y: " << nodeChilds[i] -> getPosition().second << " Data: " << nodeChilds[i] -> getData() << "\n";
     }
   }
+
+  std::cout << "Pos X: " << nodeChilds[0] -> getPosition().first << " Pos Y: " << nodeChilds[0] -> getPosition().second << " Data: " << nodeChilds[0] -> getData() << "\n";
+
 
 
   //nodeAux = nodeChilds[0];

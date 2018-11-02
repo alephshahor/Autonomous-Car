@@ -133,9 +133,10 @@ void Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,i
   // Then for each node we calculate its function
   // And also we set them as actualNode childs
   for (int i = 0; i < nodeChilds.size(); i++){
-       std::cout << "Introducing node with PosX: " << nodeChilds[i].getPosition().first << " PosY: " << nodeChilds[i].getPosition().second << "\n";
-       nodeChilds[i].setData(calculateFunction(nodeChilds[i], finalPos, actualWeight));
-       actualNode -> setChild(&nodeChilds[i]);
+      std::cout << "Introducing node with PosX: " << nodeChilds[i].getPosition().first << " PosY: " << nodeChilds[i].getPosition().second;
+      nodeChilds[i].setData(calculateFunction(nodeChilds[i], finalPos, actualWeight));
+      std::cout << " with data: " << nodeChilds[i].getData() << "\n";
+      actualNode -> setChild(&nodeChilds[i]);
   }
 
 
@@ -158,24 +159,30 @@ void Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,i
   // Pops the node that was being expanded
   nodeDeque.pop_front();
 
+  //TODO I think this is being ordered badly.
   // Sort the rest of the nodes
   for (int i = 0; i < nodeDeque.size(); i++){
     int minValue = nodeDeque[i].getData();
     int minIndex = -1;
     for (int j = 0; j < nodeDeque.size(); j++){
-      if (minValue > nodeDeque[j].getData()){
+      if (minValue < nodeDeque[j].getData()){ // If i don't change the '>' for a '<' it changes it in reverse order
+                                              // TODO find out why!
           minValue = nodeDeque[j].getData();
           minIndex = j;
         }
     }
 
-    if ((minIndex != -1) && (minValue != nodeDeque[0].getData())){
-        Node nodeTemp = nodeDeque[0];
-        nodeDeque[0] = nodeDeque[minIndex];
+    if ((minIndex != -1) && (minValue != nodeDeque[i].getData())){
+        Node nodeTemp = nodeDeque[i];
+        nodeDeque[i] = nodeDeque[minIndex];
         nodeDeque[minIndex] = nodeTemp;
     }
 
   }
+
+  for (int i = 0; i < nodeDeque.size(); i++)
+      std::cout << "NODE POS ( " << nodeDeque[i].getPosition().first << " , " << nodeDeque[i].getPosition().second << ") \n";
+      std::cout << "------------------------------\n";
 
   std::cout << "Front node has PosX : " << nodeDeque.front().getPosition().first << " PosY: " << nodeDeque.front().getPosition().second << "\n";
 

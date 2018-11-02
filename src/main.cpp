@@ -12,6 +12,10 @@
 
 int main(){
 
+Field testField(20,20,1);
+testField.calculateOptimalRoute(std::make_pair(1,1), std::make_pair(3,3));
+
+/*
 int posX, posY;
 std::cout << "Introduce field X-AXIS dimension: ";
 std::cin >> posX;
@@ -38,7 +42,7 @@ int screen = 0;
 
 while (screen != -1){
   screen = Screens[screen] -> Run(window);
-}
+}*/
 
 
 
