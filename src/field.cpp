@@ -81,17 +81,17 @@ std::vector<Node> Field::calculateChilds(Node* targetNode){
     std::pair<int,int> actualPos = targetNode -> getPosition();
 
     if ((actualPos.first != 0) && (!vectorOfCells[actualPos.first - 1][actualPos.second].isOccupied()))
-        nodeChilds.push_back(Node(std::make_pair(actualPos.first - 1, actualPos.second), targetNode));
+        nodeChilds.push_back(Node(std::make_pair(actualPos.first - 1, actualPos.second), 0, targetNode));
 
     if ((actualPos.first != vectorOfCells.size() - 1) && (!vectorOfCells[actualPos.first + 1][actualPos.second].isOccupied()))
-        nodeChilds.push_back(Node(std::make_pair(actualPos.first + 1, actualPos.second), targetNode));
+        nodeChilds.push_back(Node(std::make_pair(actualPos.first + 1, actualPos.second), 0, targetNode));
 
 
     if ((actualPos.second != 0) && (!vectorOfCells[actualPos.first][actualPos.second - 1].isOccupied()))
-        nodeChilds.push_back(Node(std::make_pair(actualPos.first, actualPos.second - 1), targetNode));
+        nodeChilds.push_back(Node(std::make_pair(actualPos.first, actualPos.second - 1), 0, targetNode));
 
     if ((actualPos.second != vectorOfCells[0].size() - 1) && (!vectorOfCells[actualPos.first][actualPos.second + 1].isOccupied()))
-        nodeChilds.push_back(Node(std::make_pair(actualPos.first, actualPos.second + 1), targetNode));
+        nodeChilds.push_back(Node(std::make_pair(actualPos.first, actualPos.second + 1), 0, targetNode));
 
     return nodeChilds;
 }
@@ -105,94 +105,139 @@ int Field::calculateHeuristic(Node targetNode, std::pair<int,int> finalPos){
 
 }
 
-int Field::calculateFunction(Node targetNode, std::pair<int,int> finalPos, int actualWeight){
-      return calculateHeuristic(targetNode, finalPos) + actualWeight;
+int Field::calculateFunction(Node targetNode, std::pair<int,int> finalPos){
+      return calculateHeuristic(targetNode, finalPos) + (targetNode.getParent() -> getWeight() + 1);
+}
+
+bool Field::nodesAreEqual(Node* nodeA, Node* nodeB){
+  if (nodeA -> getPosition().first != nodeB -> getPosition().first){
+    return false;
+    }else if (nodeA -> getPosition().second != nodeB-> getPosition().second){
+        return false;
+    }else if (nodeA -> getData() != nodeB -> getData()){
+        return false;
+    }else if (nodeA -> getWeight() != nodeB -> getWeight()){
+        return false;
+    }else return true;
 }
 
 
+void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
+  // Beginning of the method.
+
+    std::list<Node*>::iterator targetNode = nodeQueue.begin();
+
+    while (targetNode != nodeQueue.end()){
+
+    bool coincidences = true;
+    while(coincidences){
+
+      coincidences = false;
+      std::list<Node*>::iterator it = targetNode;
+      it++;
+
+
+      while (it != nodeQueue.end()){
+        //std::cout << "Iterating\n";
+        //std::cout << "It node = ";
+        (*it) -> printInfo();
+        //std::cout << "Target node = ";
+        (*targetNode) -> printInfo();
+
+        if ( nodesAreEqual((*it),(*targetNode)) ){
+             //std::cout << "Erasing\n";
+             nodeQueue.erase(it);
+             coincidences = true;
+             break;
+        }else it++;
+      }
+
+    }
+      targetNode++;
+  }
+}
+
 // TODO Check the boundaries of the field while calculating the childs.
 
-void Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos){
 
+ void Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos){
 
-  int actualWeight = 1;
   int nodesIterator = 0;
-  Node rootNode(initialPos, NULL);
+  Node rootNode(initialPos, 0, NULL);
 
   Node* actualNode = &rootNode;
-  std::vector<Node> vectorOfNodes;
-  std::deque<Node*> nodeDeque;
 
-  nodeDeque.push_back(actualNode);
+  std::list<Node> nodeList;
+  std::list<Node*> nodeQueue;
+
+  nodeQueue.push_back(actualNode);
+
+  int itCounter =  0;
 
   // While the actualNode is not the target node.
-  while ((actualNode -> getPosition().first != finalPos.first) && (actualNode -> getPosition().second != finalPos.second)){
+  // (actualNode -> getPosition().first != finalPos.first) || (actualNode -> getPosition().second != finalPos.second)
+  while ( (actualNode -> getPosition().first != finalPos.first) || (actualNode -> getPosition().second != finalPos.second)){
 
   // We calculate actualNode childs
   std::vector<Node> nodeChilds = calculateChilds(actualNode);
-  vectorOfNodes.insert(vectorOfNodes.end(), nodeChilds.begin(), nodeChilds.end());
 
-  // Then for each node we calculate its function
-  // And also we set them as actualNode childs
+  // We push all the nodes  in the list
+  for (auto node : nodeChilds)
+      nodeList.push_back(node);
 
-  for (int i = nodesIterator; i < vectorOfNodes.size(); i++){
-      //std::cout << "Introducing node with PosX: " << vectorOfNodes[i].getPosition().first << " PosY: " << vectorOfNodes[i].getPosition().second;
-      vectorOfNodes[i].setData(calculateFunction(vectorOfNodes[i], finalPos, actualWeight));
-      //std::cout << " with data: " << vectorOfNodes[i].getData() << "\n";
-      actualNode -> setChild(&vectorOfNodes[i]);
+
+  /* This iterator 'tries' to find the last new node inserted in the nodeList*/
+  std::list<Node>::iterator listIterator = std::find(nodeList.begin(), nodeList.end(), *(nodeChilds.begin()));
+
+  std::list<Node>::iterator listIterator_ = listIterator;
+
+  for (std::list<Node>::iterator it = listIterator_; it != nodeList.end(); it++){
+    it -> setData(calculateFunction((*it), finalPos));
+    it -> setWeight(it -> getParent() -> getWeight() + 1);
+    actualNode -> setChild(&(*it));
   }
 
-  // We push them all
-  for (int i = nodesIterator; i < vectorOfNodes.size(); i++){
-      //std::cout << "Introducing node in deque with PosX: " << vectorOfNodes[i].getPosition().first << " PosY: " << vectorOfNodes[i].getPosition().second << "\n";
-      nodeDeque.push_back(&vectorOfNodes[i]);
-    }
 
-  nodesIterator += nodeChilds.size();
+  listIterator_ = listIterator;
 
-  // Pops the node that was being expanded
-  nodeDeque.pop_front();
 
-  //TODO This is being ordered badly.
-  // Sort the rest of the nodes
-  for (int i = 0; i < nodeDeque.size(); i++){
-    int minValue = nodeDeque[i] -> getData();
-    int minIndex = -1;
-    for (int j = 0; j < nodeDeque.size(); j++){
-      if (minValue < nodeDeque[j] -> getData()){ // If i don't change the '>' for a '<' it changes it in reverse order
-                                              // TODO find out why!
-          minValue = nodeDeque[j] -> getData();
-          minIndex = j;
-        }
-    }
-
-    if ((minIndex != -1) && (minValue != nodeDeque[i] -> getData())){
-        Node* nodeTemp = nodeDeque[i];
-        nodeDeque[i] = nodeDeque[minIndex];
-        nodeDeque[minIndex] = nodeTemp;
-    }
-
+  // We push in the queue the new nodes.
+  for (std::list<Node>::iterator it = listIterator; it != nodeList.end(); it++){
+      nodeQueue.push_back(&(*it));
   }
 
-  /*
-  for (int i = 0; i < nodeDeque.size(); i++)
-      std::cout << "NODE POS ( " << nodeDeque[i].getPosition().first << " , " << nodeDeque[i].getPosition().second << ") \n";
-      std::cout << "------------------------------\n";*/
+  // We actualize the iterator
+  listIterator = nodeList.end();
 
-  //std::cout << "Front node has PosX : " << nodeDeque.front() -> getPosition().first << " PosY: " << nodeDeque.front() -> getPosition().second << "\n";
+  // We pop of the queue the current node being explored
+  nodeQueue.pop_front();
 
-  //std::cout << "Front node has PosX : " << nodeDeque.front().getPosition().first << " PosY: " << nodeDeque.front().getPosition().second << "\n";
+
+
+  // We sort the list
+  nodeQueue.sort([](Node* & a, Node* & b) { return a -> getData() < b -> getData(); });
+
+  eliminateDuplicates(nodeQueue);
+
+
+
+    std::cout << "----------------------LIST--------------------\n";
+    for (auto node : nodeList)
+        std::cout << "NODE POS ( " << node.getPosition().first << " , " << node.getPosition().second << ") \n";
+
+    std::cout << "----------------------LIST/QUEUE--------------------\n";
+    for (auto node : nodeQueue)
+          std::cout << "NODE POS ( " << node -> getPosition().first << " , " << node -> getPosition().second << ") DATA : "  << node -> getData() << " WEIGHT " << node -> getWeight() <<   "\n";
+
 
   // Front node of the deque will be the actualNode to expand
-  actualNode = nodeDeque.front();
+  actualNode = nodeQueue.front();
 
-
-
-  actualWeight++;
-
+  //std::cout << "Front node has PosX : " << nodeQueue.front() -> getPosition().first << " PosY: " << nodeQueue.front() -> getPosition().second << " and data: " << nodeQueue.front() -> getData() << "\n";
+  itCounter++;
   }
 
-  rootNode.printDescendents();
+  actualNode -> printParents();
 
 
 

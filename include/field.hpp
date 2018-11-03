@@ -1,9 +1,11 @@
 #pragma once
 #include <iostream>
 #include <cmath>
-#include <deque>
+#include <set>
+#include <list>
 #include "cell.hpp"
 #include "node.hpp"
+
 
 
 // Consider the field border as non available space to access.
@@ -32,8 +34,10 @@ class Field{
         void changeCellState(int posX, int posY);
         std::vector<Node> calculateChilds(Node* targetNode);
         int calculateHeuristic(Node targetNode, std::pair<int,int> finalPos);
-        int calculateFunction(Node targetNode, std::pair<int,int> finalPos, int actualWeight);
+        int calculateFunction(Node targetNode, std::pair<int,int> finalPos);
         void calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos);
+        bool nodesAreEqual(Node* nodeA, Node* nodeB);
+        void eliminateDuplicates(std::list<Node*>&gi nodeQueue);
 
 
 

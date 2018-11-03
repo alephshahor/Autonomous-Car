@@ -8,13 +8,14 @@ class Node{
 
       std::pair<int,int> position;
       int                data;
+      int                weight;
       Node*              nodeParent;
       std::vector<Node*> nodeChilds;
 
 
       public:
 
-      Node(std::pair<int,int> position, Node* nodeParent);
+      Node(std::pair<int,int> position, int actualWeight,  Node* nodeParent);
       int getData();
       std::pair<int,int> getPosition();
       void setPosition(std::pair<int,int> position);
@@ -26,7 +27,13 @@ class Node{
       Node* getParent();
       void printDescendents();
       void printDescendents_(Node* nodeAux);
+      void printParents();
 
+      int getWeight();
+      void setWeight(int weight);
+
+      void printInfo();
+      bool operator==(const Node& targetNode);
 
 
 };
