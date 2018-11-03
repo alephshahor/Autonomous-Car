@@ -24,6 +24,8 @@ void Node::setData(int data){
 
 
 void Node::setChild(Node* newNode){
+  std::cout << "I'm the node with PosX: " << position.first << " and PosY " <<  position.second;
+  std::cout << " child being push has PosX: " << newNode -> getPosition().first << " PosY: " << newNode -> getPosition().second << " Data: " << newNode -> getData() << "\n";
   nodeChilds.push_back(newNode);
 }
 
@@ -40,14 +42,13 @@ void Node::printDescendents(){
 
   Node* nodeAux = NULL;
 
-  if (!nodeChilds.empty()){
-    for (int i = 0; i < nodeChilds.size(); i++){
-      std::cout << "Pos X: " << nodeChilds[i] -> getPosition().first << " Pos Y: " << nodeChilds[i] -> getPosition().second << " Data: " << nodeChilds[i] -> getData() << "\n";
+  std::vector<Node*> nodeChilds_ = nodeChilds[3] -> getChilds();
+
+  if (!nodeChilds_.empty()){
+    for (int i = 0; i < nodeChilds_.size(); i++){
+      std::cout << "Pos X: " << nodeChilds_[i] -> getPosition().first << " Pos Y: " << nodeChilds_[i] -> getPosition().second << " Data: " << nodeChilds_[i] -> getData() << "\n";
     }
-  }
-
-  std::cout << "Pos X: " << nodeChilds[0] -> getPosition().first << " Pos Y: " << nodeChilds[0] -> getPosition().second << " Data: " << nodeChilds[0] -> getData() << "\n";
-
+  }else std::cout << "Empty childs" << "\n";
 
 
   //nodeAux = nodeChilds[0];

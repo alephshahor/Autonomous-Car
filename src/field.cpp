@@ -116,80 +116,75 @@ void Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,i
 
 
   int actualWeight = 1;
+  int nodesIterator = 0;
   Node rootNode(initialPos, NULL);
 
   Node* actualNode = &rootNode;
   std::vector<Node> vectorOfNodes;
-  std::deque<Node> nodeDeque;
+  std::deque<Node*> nodeDeque;
 
-  nodeDeque.push_back(rootNode);
+  nodeDeque.push_back(actualNode);
 
   // While the actualNode is not the target node.
   while ((actualNode -> getPosition().first != finalPos.first) && (actualNode -> getPosition().second != finalPos.second)){
 
   // We calculate actualNode childs
   std::vector<Node> nodeChilds = calculateChilds(actualNode);
+  vectorOfNodes.insert(vectorOfNodes.end(), nodeChilds.begin(), nodeChilds.end());
 
   // Then for each node we calculate its function
   // And also we set them as actualNode childs
-  for (int i = 0; i < nodeChilds.size(); i++){
-      std::cout << "Introducing node with PosX: " << nodeChilds[i].getPosition().first << " PosY: " << nodeChilds[i].getPosition().second;
-      nodeChilds[i].setData(calculateFunction(nodeChilds[i], finalPos, actualWeight));
-      std::cout << " with data: " << nodeChilds[i].getData() << "\n";
-      actualNode -> setChild(&nodeChilds[i]);
+
+  for (int i = nodesIterator; i < vectorOfNodes.size(); i++){
+      //std::cout << "Introducing node with PosX: " << vectorOfNodes[i].getPosition().first << " PosY: " << vectorOfNodes[i].getPosition().second;
+      vectorOfNodes[i].setData(calculateFunction(vectorOfNodes[i], finalPos, actualWeight));
+      //std::cout << " with data: " << vectorOfNodes[i].getData() << "\n";
+      actualNode -> setChild(&vectorOfNodes[i]);
   }
 
-
-
-  // Now we push them sorted in a deque
-  // TODO: Im pushing multiple times the same node.
-
-  /*for (int i = 0; i < nodeChilds.size(); i++){
-    Node nodeToPush = nodeChilds[i];
-    for (int j = 0; j < nodeChilds.size(); j++){
-        if (nodeChilds[i].getData() < nodeChilds[j].getData())
-            nodeToPush = nodeChilds[i];
-        else nodeToPush = nodeChilds[j];
+  // We push them all
+  for (int i = nodesIterator; i < vectorOfNodes.size(); i++){
+      //std::cout << "Introducing node in deque with PosX: " << vectorOfNodes[i].getPosition().first << " PosY: " << vectorOfNodes[i].getPosition().second << "\n";
+      nodeDeque.push_back(&vectorOfNodes[i]);
     }
-  }*/
 
-  for (int i = 0; i < nodeChilds.size(); i++)
-      nodeDeque.push_back(nodeChilds[i]);
+  nodesIterator += nodeChilds.size();
 
   // Pops the node that was being expanded
   nodeDeque.pop_front();
 
-  //TODO I think this is being ordered badly.
+  //TODO This is being ordered badly.
   // Sort the rest of the nodes
   for (int i = 0; i < nodeDeque.size(); i++){
-    int minValue = nodeDeque[i].getData();
+    int minValue = nodeDeque[i] -> getData();
     int minIndex = -1;
     for (int j = 0; j < nodeDeque.size(); j++){
-      if (minValue < nodeDeque[j].getData()){ // If i don't change the '>' for a '<' it changes it in reverse order
+      if (minValue < nodeDeque[j] -> getData()){ // If i don't change the '>' for a '<' it changes it in reverse order
                                               // TODO find out why!
-          minValue = nodeDeque[j].getData();
+          minValue = nodeDeque[j] -> getData();
           minIndex = j;
         }
     }
 
-    if ((minIndex != -1) && (minValue != nodeDeque[i].getData())){
-        Node nodeTemp = nodeDeque[i];
+    if ((minIndex != -1) && (minValue != nodeDeque[i] -> getData())){
+        Node* nodeTemp = nodeDeque[i];
         nodeDeque[i] = nodeDeque[minIndex];
         nodeDeque[minIndex] = nodeTemp;
     }
 
   }
 
+  /*
   for (int i = 0; i < nodeDeque.size(); i++)
       std::cout << "NODE POS ( " << nodeDeque[i].getPosition().first << " , " << nodeDeque[i].getPosition().second << ") \n";
-      std::cout << "------------------------------\n";
+      std::cout << "------------------------------\n";*/
 
-  std::cout << "Front node has PosX : " << nodeDeque.front().getPosition().first << " PosY: " << nodeDeque.front().getPosition().second << "\n";
+  //std::cout << "Front node has PosX : " << nodeDeque.front() -> getPosition().first << " PosY: " << nodeDeque.front() -> getPosition().second << "\n";
 
   //std::cout << "Front node has PosX : " << nodeDeque.front().getPosition().first << " PosY: " << nodeDeque.front().getPosition().second << "\n";
 
   // Front node of the deque will be the actualNode to expand
-  actualNode = &nodeDeque.front();
+  actualNode = nodeDeque.front();
 
 
 
