@@ -1,7 +1,7 @@
 #include "cell.hpp"
 
 
-Cell::Cell(float cellSize, std::pair<int,int> position, cellObjects cellType, bool occupied = false):
+Cell::Cell(float cellSize, std::pair<int,int> position, CellObjects cellType, bool occupied = false):
       cellSize(cellSize),
       position(position),
       cellType(cellType)
@@ -9,11 +9,12 @@ Cell::Cell(float cellSize, std::pair<int,int> position, cellObjects cellType, bo
         blackSquare.loadFromFile("./art/black.png");
         whiteSquare.loadFromFile("./art/white.png");
         goalSquare.loadFromFile("./art/goal.png");
+        optimalSquare.loadFromFile("./art/red.png");
         cellDrawable.setSize(sf::Vector2f(cellSize,cellSize));
         cellDrawable.setPosition(position.first, position.second);
       }
 
-Cell::Cell(float cellSize, int posX, int posY, cellObjects cellType,  bool occupied = false){
+Cell::Cell(float cellSize, int posX, int posY, CellObjects cellType,  bool occupied = false){
       this -> cellSize = cellSize;
       this -> cellType = cellType;
       position = std::make_pair(posX, posY);
@@ -21,6 +22,7 @@ Cell::Cell(float cellSize, int posX, int posY, cellObjects cellType,  bool occup
       blackSquare.loadFromFile("./art/black.png");
       whiteSquare.loadFromFile("./art/white.png");
       goalSquare.loadFromFile("./art/goal.png");
+      optimalSquare.loadFromFile("./art/red.png");
       cellDrawable.setSize(sf::Vector2f(cellSize,cellSize));
       cellDrawable.setPosition(posX, posY);
 }
@@ -36,11 +38,12 @@ void Cell::setPosition(std::pair<int,int> position){
     this -> position.second = position.second;
 }
 
-void Cell::setTexture(cellObjects cellObject){
+void Cell::setTexture(CellObjects cellObject){
 
     switch(cellObject){
 
       case 0:
+      std::cout << "Trying to put white squares\n";
       cellDrawable.setTexture(&whiteSquare);
       break;
 
@@ -50,6 +53,10 @@ void Cell::setTexture(cellObjects cellObject){
 
       case 2:
       cellDrawable.setTexture(&goalSquare);
+      break;
+
+      case 3:
+      cellDrawable.setTexture(&optimalSquare);
       break;
 
       default:

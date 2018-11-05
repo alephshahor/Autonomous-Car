@@ -2,12 +2,19 @@
 
 int simulationScreen::Run(sf::RenderWindow& window){
 
-Field simulationField(fieldDimension.first - 40,fieldDimension.second,20.0f);
+std::cout << "Field dimension is " << fieldDimension.first << " , " << fieldDimension.second << "\n";
+Field simulationField(fieldDimension.first,fieldDimension.second,20.0f);
+//Field simulationField(20,20,1);
+
+
+std::cout << "I made it\n";
 std::pair<int,int> carDimension = std::make_pair(20,20);
 std::pair<int,int> carPosition = std::make_pair(10,10);
 autonomousCar ferrari(carDimension, carPosition);
 
 bool running = true;
+bool pause = false;
+bool optimalRoute = false;
 
 while (running){
   sf::Event evnt;
@@ -20,7 +27,7 @@ while (running){
            break;
       case sf::Event::MouseButtonPressed:
              if (evnt.mouseButton.button == sf::Mouse::Left)
-             simulationField.changeCellState(evnt.mouseButton.x, evnt.mouseButton.y);
+             simulationField.changeCellState(evnt.mouseButton.x, evnt.mouseButton.y, Obstacle);
              break;
       case sf::Event::KeyPressed:
              std::cout << evnt.key.code << "\n";
@@ -34,19 +41,31 @@ while (running){
                ferrari.moveUp();
              if (evnt.key.code == sf::Keyboard::S && !ferrari.checkBackwardsCollision(simulationField))
                ferrari.moveDown();
+             if ((evnt.key.code == sf::Keyboard::Num1) && (!optimalRoute)){
+
+                  std::pair<int,int> carPos = ferrari.getPosition();
+                  std::vector<Cell> optimalCellRoute = simulationField.calculateOptimalRoute(carPos, std::make_pair(3,3));
+
+                  for (auto Cell: optimalCellRoute)
+                      simulationField.changeCellState(Cell.getPosition().first, Cell.getPosition().second, Optimal);
+
+
+             }
 
              break;
     }
 
   }
 
+  if (!pause){
   std::pair<int,int> carPos = ferrari.getPosition();
   window.clear();
   for (int i = 0; i < simulationField.getWidth(); i++){
     for (int j = 0; j < simulationField.getHeight(); j++){
-      window.draw(simulationField.getCell(i,j));
       if ((i == carPos.first) && (j == carPos.second))
            window.draw(ferrari);
+      else window.draw(simulationField.getCell(i,j));
+      }
     }
   }
 

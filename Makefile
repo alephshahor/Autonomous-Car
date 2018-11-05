@@ -4,7 +4,7 @@ TARGET = AutonomousCar
 SRC = src
 INC = include
 BIN = bin
-FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+FLAGS =  -lsfml-graphics -lsfml-window -lsfml-system
 CFLAGS = -std=c++11 -I$(INC)
 
 SOURCE = $(wildcard $(SRC)/*.cpp)

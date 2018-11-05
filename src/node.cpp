@@ -41,15 +41,19 @@
     return nodeParent;
   }
 
-  void Node::printParents(){
+  std::vector<Node*> Node::getRoute(){
 
+    std::vector<Node*> wayBack;
     Node* nodeAux = nodeParent;
 
     std::cout << "I'm the node with PosX: " << position.first << " and PosY " <<  position.second << "\n";
     while (nodeAux != NULL){
       std::cout << "X Pos: " << nodeAux -> getPosition().first << " Y Pos: " << nodeAux -> getPosition().second << " Data: " <<nodeAux -> getData() << "\n";
+      wayBack.push_back(nodeAux);
       nodeAux = nodeAux -> getParent();
     }
+
+    return wayBack;
 
   }
 

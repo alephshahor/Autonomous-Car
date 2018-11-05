@@ -5,9 +5,9 @@ Field::Field(int width, int height, float cellSize):
        vectorOfCells(),
        fieldDimension(std::make_pair(width,height))
        {
-
          for (int i = 0; i < width / cellSize; i++){
              std::vector<Cell> vCells;
+             vCells.reserve(width / cellSize);
              for (int j = 0; j < height / cellSize; j++){
                vCells.push_back(Cell(cellSize, cellSize*i, cellSize*j, Empty, false));
               }
@@ -60,18 +60,39 @@ int Field::getHeight(){
   return fieldDimension.second / cellSize;
 }
 
-void Field::changeCellState(int posX, int posY){
+void Field::changeCellState(int posX, int posY, CellObjects cellObject){
 
     posX /= cellSize;
     posY /= cellSize;
 
-    if (!vectorOfCells[posX][posY].isOccupied()){
+    if (!vectorOfCells[posX][posY].isOccupied())
         vectorOfCells[posX][posY].occupy();
-        vectorOfCells[posX][posY].setTexture(Obstacle);
-    }else{
-        vectorOfCells[posX][posY].release();
-        vectorOfCells[posX][posY].setTexture(Empty);
-      }
+    else vectorOfCells[posX][posY].release();
+
+
+    switch(cellObject){
+      case 0:
+      vectorOfCells[posX][posY].setTexture(Empty);
+      break;
+
+      case 1:
+      vectorOfCells[posX][posY].setTexture(Obstacle);
+      break;
+
+      case 2:
+      vectorOfCells[posX][posY].setTexture(Goal);
+      break;
+
+      case 3:
+      vectorOfCells[posX][posY].setTexture(Optimal);
+      break;
+
+      default:
+      std::cerr << "Failed trying to change texture\n";
+      break;
+
+    }
+
 }
 
 
@@ -160,7 +181,7 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
 // TODO Check the boundaries of the field while calculating the childs.
 
 
- void Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos){
+ std::vector<Cell> Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos){
 
   int nodesIterator = 0;
   Node rootNode(initialPos, 0, NULL);
@@ -237,9 +258,14 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
   itCounter++;
   }
 
-  actualNode -> printParents();
+  std::vector<Node*> optimalNodeRoute = actualNode -> getRoute();
 
-
+  std::vector<Cell> optimalCellRoute;
+  for (auto node : optimalNodeRoute){
+       Cell cell = getCell(node -> getPosition().first, node -> getPosition().second);
+       optimalCellRoute.push_back(cell);
+     }
+  return optimalCellRoute;
 
 
 }

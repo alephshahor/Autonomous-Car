@@ -3,6 +3,7 @@
 #include <cmath>
 #include <set>
 #include <list>
+#include <stack>
 #include "cell.hpp"
 #include "node.hpp"
 
@@ -31,13 +32,13 @@ class Field{
         int getHeight();
 
         //  This function changes the cell from dead to alive and vice versa
-        void changeCellState(int posX, int posY);
+        void changeCellState(int posX, int posY, CellObjects cellObject);
         std::vector<Node> calculateChilds(Node* targetNode);
         int calculateHeuristic(Node targetNode, std::pair<int,int> finalPos);
         int calculateFunction(Node targetNode, std::pair<int,int> finalPos);
-        void calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos);
+        std::vector<Cell> calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos);
         bool nodesAreEqual(Node* nodeA, Node* nodeB);
-        void eliminateDuplicates(std::list<Node*>&gi nodeQueue);
+        void eliminateDuplicates(std::list<Node*>& nodeQueue);
 
 
 

@@ -27,7 +27,7 @@ class Node{
       Node* getParent();
       void printDescendents();
       void printDescendents_(Node* nodeAux);
-      void printParents();
+      std::vector<Node*> getRoute();
 
       int getWeight();
       void setWeight(int weight);

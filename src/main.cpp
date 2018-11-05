@@ -21,113 +21,20 @@ struct lex_compare{
 
 int main(){
 
+  /*sf::Texture myTexture;
+  sf::RectangleShape myDrawable;
+  myDrawable.setSize(sf::Vector2f(20.0f,20.0f));
+  myDrawable.setPosition(0,0);
+  myTexture.loadFromFile("black.png");
+  myDrawable.setTexture(&myTexture);
 
 
-Field testField(100,100,1);
-testField.calculateOptimalRoute(std::make_pair(1,1), std::make_pair(0,99));
+  sf::RenderWindow window(sf::VideoMode(200,200), "Autonomous Car", sf::Style::Close);
 
+  while(true){
+  window.draw(myDrawable);
+}*/
 
-/*
-std::list<Node*> listaDeNodos;
-Node nodo1(std::make_pair(1,1),0,NULL);
-Node nodo2(std::make_pair(2,2),0,NULL);
-Node nodo3(std::make_pair(1,1),0,NULL);
-Node nodo4(std::make_pair(2,2),0,NULL);
-Node nodo5(std::make_pair(3,3),0,NULL);
-Node nodo6(std::make_pair(3,3),0,NULL);
-Node nodo7(std::make_pair(1,1),0,NULL);
-listaDeNodos.push_back(&nodo1);
-listaDeNodos.push_back(&nodo2);
-listaDeNodos.push_back(&nodo3);
-listaDeNodos.push_back(&nodo4);
-listaDeNodos.push_back(&nodo5);
-listaDeNodos.push_back(&nodo6);
-listaDeNodos.push_back(&nodo7);
-
-
-for (auto node: listaDeNodos)
-    node -> printInfo();
-
-
-    std::list<Node*>::iterator targetNode = listaDeNodos.begin();
-
-    while (targetNode != listaDeNodos.end()){
-
-    bool coincidences = true;
-    while(coincidences){
-
-      coincidences = false;
-      std::list<Node*>::iterator it = targetNode;
-      it++;
-
-
-      while (it != listaDeNodos.end()){
-        std::cout << "Iterating\n";
-        std::cout << "It node = ";
-        (*it) -> printInfo();
-        std::cout << "Target node = ";
-        (*targetNode) -> printInfo();
-
-        if ( nodesAreEqual((*it),(*targetNode)) ){
-             std::cout << "Erasing\n";
-             listaDeNodos.erase(it);
-             coincidences = true;
-             break;
-        }else it++;
-      }
-
-    }
-      targetNode++;
-  }*/
-
-    /*
-    bool coincidences = true;
-    //TODO Cada vez que borre que pare.
-    while (coincidences){
-
-    coincidences = false;
-    std::list<Node*>::iterator it_ = listaDeNodos.begin();
-    std::list<Node*>::iterator it = it_;
-    it++;
-
-    while (it != listaDeNodos.end()){
-
-      std::cout << "Iterating\n";
-      std::cout << "It node = ";
-      (*it) -> printInfo();
-      std::cout << "It_ node = ";
-      (*it_) -> printInfo();
-
-      if ( nodesAreEqual((*it),(*it_)) ){
-           std::cout << "Erasing\n";
-           listaDeNodos.erase(it);
-           coincidences = true;
-           break;
-      }else it++;
-    }
-  }*/
-/*
-std::set<Node*, lex_compare> miSet;
-Node nodo1(std::make_pair(1,1), 1, NULL);
-nodo1.setData(20);
-Node nodo4(std::make_pair(1,1), 1, NULL);
-nodo4.setData(4);
-Node nodo2(std::make_pair(1,1), 1, NULL);
-nodo2.setData(20);
-Node nodo3(std::make_pair(1,1), 1, NULL);
-nodo3.setData(10);
-
-miSet.insert(miSet.end(), &nodo1);
-miSet.insert(miSet.end(), &nodo2);
-miSet.insert(miSet.end(), &nodo3);
-miSet.insert(miSet.end(), &nodo4);
-
-for (auto node: miSet)
-     node -> printInfo();
-
-*/
-
-/*
 int posX, posY;
 std::cout << "Introduce field X-AXIS dimension: ";
 std::cin >> posX;
@@ -154,7 +61,7 @@ int screen = 0;
 
 while (screen != -1){
   screen = Screens[screen] -> Run(window);
-}*/
+}
 
 
 
