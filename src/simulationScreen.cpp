@@ -3,12 +3,12 @@
 int simulationScreen::Run(sf::RenderWindow& window){
 
 std::cout << "Field dimension is " << fieldDimension.first << " , " << fieldDimension.second << "\n";
-Field simulationField(fieldDimension.first,fieldDimension.second,20.0f);
+Field simulationField(fieldDimension.first,fieldDimension.second,float(getCellSize()));
 //Field simulationField(20,20,1);
 
 
 std::cout << "I made it\n";
-std::pair<int,int> carDimension = std::make_pair(20,20);
+std::pair<int,int> carDimension = std::make_pair(getCellSize(),getCellSize());
 std::pair<int,int> carPosition = std::make_pair(10,10);
 autonomousCar ferrari(carDimension, carPosition);
 

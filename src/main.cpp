@@ -21,19 +21,6 @@ struct lex_compare{
 
 int main(){
 
-  /*sf::Texture myTexture;
-  sf::RectangleShape myDrawable;
-  myDrawable.setSize(sf::Vector2f(20.0f,20.0f));
-  myDrawable.setPosition(0,0);
-  myTexture.loadFromFile("black.png");
-  myDrawable.setTexture(&myTexture);
-
-
-  sf::RenderWindow window(sf::VideoMode(200,200), "Autonomous Car", sf::Style::Close);
-
-  while(true){
-  window.draw(myDrawable);
-}*/
 
 int posX, posY;
 std::cout << "Introduce field X-AXIS dimension: ";
@@ -41,8 +28,18 @@ std::cin >> posX;
 std::cout << "Y-AXIS dimension: ";
 std::cin >> posY;
 
-posX *= 20;
-posY *= 20;
+
+if ((posX == posY) && (posX < 100)){
+  posX *= 2;
+  posY *= 2;
+  setCellSize(20);
+}else if ((posX == posY) && (posX >= 100)){
+  posX *= 10;
+  posY *= 10;
+  setCellSize(10);
+}
+
+
 
 ceil(posX);
 ceil(posY);
@@ -50,7 +47,7 @@ ceil(posY);
 setFieldDimension(posX, posY);
 
 
-sf::RenderWindow window(sf::VideoMode(posX,posY), "Autonomous Car", sf::Style::Close);
+sf::RenderWindow window(sf::VideoMode(500,500), "Autonomous Car", sf::Style::Close);
 
 std::vector<cScreen*> Screens;
 
