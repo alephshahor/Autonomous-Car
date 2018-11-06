@@ -1,26 +1,21 @@
 #include "common.hpp"
 
-std::pair<int,int> fieldDimension = std::make_pair(1,1);
-int cellSize = 0;
+std::pair<int,int> gFieldDimension = std::make_pair(1,1);
+int gCellSize = 0;
 
-
-int initialPosX = 0;
-int finalPosX = 0;
-int initialPosY = 0;
-int finalPosY = 0;
 
 void setFieldDimension(int x, int y){
-    fieldDimension = std::make_pair(x,y);
+    gFieldDimension = std::make_pair(x,y);
 }
 
 std::pair<int,int> getFieldDimension(){
-    return fieldDimension;
+    return gFieldDimension;
 }
 
 void setCellSize(int cellSize_){
-  cellSize = cellSize_;
+  gCellSize = cellSize_;
 }
 
 int getCellSize(){
-  return cellSize;
+  return gCellSize;
 }

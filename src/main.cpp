@@ -29,11 +29,11 @@ std::cout << "Y-AXIS dimension: ";
 std::cin >> posY;
 
 
-if ((posX == posY) && (posX < 100)){
-  posX *= 2;
-  posY *= 2;
+if ((posX == posY) && (posX <= 100)){
+  posX *= 20;
+  posY *= 20;
   setCellSize(20);
-}else if ((posX == posY) && (posX >= 100)){
+}else if ((posX == posY) && (posX > 100)){
   posX *= 10;
   posY *= 10;
   setCellSize(10);

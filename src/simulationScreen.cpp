@@ -2,8 +2,8 @@
 
 int simulationScreen::Run(sf::RenderWindow& window){
 
-std::cout << "Field dimension is " << fieldDimension.first << " , " << fieldDimension.second << "\n";
-Field simulationField(fieldDimension.first,fieldDimension.second,float(getCellSize()));
+std::cout << "Field dimension is " << gFieldDimension.first << " , " << gFieldDimension.second << "\n";
+Field simulationField(gFieldDimension.first,gFieldDimension.second,float(getCellSize()));
 //Field simulationField(20,20,1);
 
 

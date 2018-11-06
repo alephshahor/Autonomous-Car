@@ -3,9 +3,8 @@
 
 enum CellObjects {Empty, Obstacle, Goal, Optimal};
 enum Cardinality {North, South , East, West};
-extern std::pair<int,int> fieldDimension;
-extern int cellSize;
-extern int initialPosX, finalPosX, initialPosY, finalPosY;
+extern std::pair<int,int> gFieldDimension;
+extern int gCellSize;
 
 void setFieldDimension(int x, int y);
 std::pair<int,int> getFieldDimension();
