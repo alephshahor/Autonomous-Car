@@ -5,7 +5,7 @@ This program simulates the behaviour of an autonomous car  picking-up passengers
 We simulate an M x N grid with free cells and occupied cells (obstacles). Our car can move freely between free cells on a NSEW movement (no diagonal movements). We also can put freely obstacles in the grid (and remove them) with the mouse. 
 
 
-We are using c++ for general programing, and for the graphics we are using the open source [SFML libraries](https://www.sfml-dev.org)
+We are using c++ for general programing, and for the graphics we are using the open source [SFML libraries](https://www.sfml-dev.org).
 
 Authors: 
 * Adrián Álvarez León
