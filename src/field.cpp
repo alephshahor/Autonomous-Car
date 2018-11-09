@@ -186,7 +186,102 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
 
 // TODO Check the boundaries of the field while calculating the childs.
 
+ Node* Field::findMinimumNode(std::list<Node*>& openList){
+   std::list<Node*>::iterator itMin = openList.begin();
+   Node* minimumNode = (*itMin);
 
+   for (std::list<Node*>::iterator it = openList.begin(); it != openList.end(); it++){
+     if ((*it) -> getData() < minimumNode -> getData()){
+         minimumNode = *it;
+         itMin = it;
+       }
+   }
+
+   openList.erase(itMin);
+
+   return minimumNode;
+
+ }
+
+ bool Field::lowerEqualExist(std::list<Node*> openList, Node node){
+      Node* targetNode = &node;
+      for (std::list<Node*>::iterator it = openList.begin(); it != openList.end(); it++){
+          if (((*it) -> getPosition().first == targetNode -> getPosition().first) && ((*it) -> getPosition().second == targetNode -> getPosition().second)){
+              if ((*it) -> getData() <= targetNode -> getData())
+                 return true;
+          }
+      }
+
+      return false;
+ }
+
+
+ bool Field::lowerEqualExist(std::list<Node> closedList, Node node){
+      for (std::list<Node>::iterator it = closedList.begin(); it != closedList.end(); it++){
+          if ((it -> getPosition().first == node.getPosition().first) && (it -> getPosition().second == node.getPosition().second)){
+              if (it -> getData() <= node.getData())
+                 return true;
+          }
+      }
+
+      return false;
+ }
+
+
+ std::list<Node> Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos){
+
+   std::list<Node> nodeList;
+   std::list<Node*> closedList;
+   std::list<Node*> openList;
+
+   Node rootNode(initialPos, 0, NULL);
+   Node* actualNode = &rootNode;
+   openList.push_back(actualNode);
+
+   int contador = 0;
+
+
+   int iterations = 0;
+   bool notFound = true;
+   while(!openList.empty() && notFound){
+
+
+     Node* minimumNode = findMinimumNode(openList);
+
+     std::vector<Node> nodeChilds = calculateChilds(minimumNode);
+
+     for (auto node: nodeChilds)
+          nodeList.push_back(node);
+
+
+       std::list<Node>::iterator beginning = std::find(nodeList.begin(), nodeList.end(), nodeChilds[0]);
+
+       for (std::list<Node>::iterator node = beginning; node != nodeList.end(); node++){
+
+       if (node -> getPosition().first == finalPos.first && node -> getPosition().second == finalPos.second){
+           notFound = false;
+           break;
+       }else{
+          node -> setData(calculateFunction((*node), finalPos));
+          node -> setWeight(node -> getParent() -> getWeight() + 1);
+       }
+
+       if((!lowerEqualExist(openList, (*node))) && (!lowerEqualExist(closedList, (*node)))){
+          openList.push_back(&(*node));
+       }
+
+     }
+        closedList.push_back(minimumNode);
+
+        iterations++;
+   }
+
+     return nodeList;
+
+ }
+
+
+/*
  std::list<Node> Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos){
 
   int nodesIterator = 0;
@@ -213,7 +308,7 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
       nodeList.push_back(node);
 
 
-  /* This iterator 'tries' to find the last new node inserted in the nodeList*/
+  // This iterator 'tries' to find the last new node inserted in the nodeList
   std::list<Node>::iterator listIterator = std::find(nodeList.begin(), nodeList.end(), *(nodeChilds.begin()));
 
   std::list<Node>::iterator listIterator_ = listIterator;
@@ -247,16 +342,6 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
   eliminateDuplicates(nodeQueue);
 
 
-
-    /*std::cout << "----------------------LIST--------------------\n";
-    for (auto node : nodeList)
-        std::cout << "NODE POS ( " << node.getPosition().first << " , " << node.getPosition().second << ") \n";
-
-    std::cout << "----------------------LIST/QUEUE--------------------\n";
-    for (auto node : nodeQueue)
-          std::cout << "NODE POS ( " << node -> getPosition().first << " , " << node -> getPosition().second << ") DATA : "  << node -> getData() << " WEIGHT " << node -> getWeight() <<   "\n";*/
-
-
   // Front node of the deque will be the actualNode to expand
   actualNode = nodeQueue.front();
 
@@ -266,12 +351,12 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
 
   std::vector<Node*> optimalNodeRoute = actualNode -> getRoute();
 
-  /*std::vector<Cell> optimalCellRoute;
+  std::vector<Cell> optimalCellRoute;
   for (auto node : optimalNodeRoute){
        Cell cell = getCell(node -> getPosition().first, node -> getPosition().second);
        optimalCellRoute.push_back(cell);
-     }*/
-  return nodeList;
+     }
+//  return nodeList;
 
 
-}
+}*/

@@ -39,6 +39,9 @@ class Field{
         std::list<Node> calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos);
         bool nodesAreEqual(Node* nodeA, Node* nodeB);
         void eliminateDuplicates(std::list<Node*>& nodeQueue);
+        Node* findMinimumNode(std::list<Node*>& openList);
+        bool lowerEqualExist(std::list<Node*> openList, Node node);
+        bool lowerEqualExist(std::list<Node> openList, Node node);
 
 
 
