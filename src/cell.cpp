@@ -10,6 +10,7 @@ Cell::Cell(float cellSize, std::pair<int,int> position, CellObjects cellType, bo
         whiteSquare.loadFromFile("./art/white.png");
         goalSquare.loadFromFile("./art/goal.png");
         optimalSquare.loadFromFile("./art/red.png");
+        visitedSquare.loadFromFile("./art/blue.png");
         cellDrawable.setSize(sf::Vector2f(cellSize,cellSize));
         cellDrawable.setPosition(position.first, position.second);
       }
@@ -23,6 +24,7 @@ Cell::Cell(float cellSize, int posX, int posY, CellObjects cellType,  bool occup
       whiteSquare.loadFromFile("./art/white.png");
       goalSquare.loadFromFile("./art/goal.png");
       optimalSquare.loadFromFile("./art/red.png");
+      visitedSquare.loadFromFile("./art/blue.png");
       cellDrawable.setSize(sf::Vector2f(cellSize,cellSize));
       cellDrawable.setPosition(posX, posY);
 }
@@ -43,7 +45,6 @@ void Cell::setTexture(CellObjects cellObject){
     switch(cellObject){
 
       case 0:
-      std::cout << "Trying to put white squares\n";
       cellDrawable.setTexture(&whiteSquare);
       break;
 
@@ -57,6 +58,10 @@ void Cell::setTexture(CellObjects cellObject){
 
       case 3:
       cellDrawable.setTexture(&optimalSquare);
+      break;
+
+      case 4:
+      cellDrawable.setTexture(&visitedSquare);
       break;
 
       default:

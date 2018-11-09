@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 
-enum CellObjects {Empty, Obstacle, Goal, Optimal};
+enum CellObjects {Empty, Obstacle, Goal, Optimal, Visited};
 enum Cardinality {North, South , East, West};
 extern std::pair<int,int> gFieldDimension;
 extern int gCellSize;

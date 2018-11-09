@@ -13,6 +13,7 @@ class Cell : public sf::Drawable{
     sf::Texture whiteSquare;
     sf::Texture blackSquare;
     sf::Texture goalSquare;
+    sf::Texture visitedSquare;
     sf::Texture optimalSquare;
     CellObjects cellType;
 

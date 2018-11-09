@@ -44,12 +44,20 @@ while (running){
              if ((evnt.key.code == sf::Keyboard::Num1) && (!optimalRoute)){
 
                   std::pair<int,int> carPos = ferrari.getPosition();
-                  std::vector<Cell> optimalCellRoute = simulationField.calculateOptimalRoute(carPos, std::make_pair(3,3));
+                  std::list<Node> cellRoute = simulationField.calculateOptimalRoute(carPos, std::make_pair(3,3));
 
-                  for (auto Cell: optimalCellRoute)
-                      simulationField.changeCellState(Cell.getPosition().first, Cell.getPosition().second, Optimal);
-
-
+                  for (auto node: cellRoute){
+                    simulationField.changeCellState(node.getPosition().first * gCellSize , node.getPosition().second * gCellSize, Visited);
+                    window.clear();
+                    for (int i = 0; i < simulationField.getWidth(); i++){
+                      for (int j = 0; j < simulationField.getHeight(); j++){
+                        if ((i == carPos.first) && (j == carPos.second))
+                             window.draw(ferrari);
+                        else window.draw(simulationField.getCell(i,j));
+                        }
+                      }
+                      window.display();
+                    }
              }
 
              break;

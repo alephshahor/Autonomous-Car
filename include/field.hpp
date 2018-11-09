@@ -36,7 +36,7 @@ class Field{
         std::vector<Node> calculateChilds(Node* targetNode);
         int calculateHeuristic(Node targetNode, std::pair<int,int> finalPos);
         int calculateFunction(Node targetNode, std::pair<int,int> finalPos);
-        std::vector<Cell> calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos);
+        std::list<Node> calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos);
         bool nodesAreEqual(Node* nodeA, Node* nodeB);
         void eliminateDuplicates(std::list<Node*>& nodeQueue);
 

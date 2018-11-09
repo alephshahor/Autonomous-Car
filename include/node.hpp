@@ -9,13 +9,14 @@ class Node{
       std::pair<int,int> position;
       int                data;
       int                weight;
+      bool               optimal;
       Node*              nodeParent;
       std::vector<Node*> nodeChilds;
 
 
       public:
 
-      Node(std::pair<int,int> position, int actualWeight,  Node* nodeParent);
+      Node(std::pair<int,int> position, int actualWeight, Node* nodeParent, bool optimal = false);
       int getData();
       std::pair<int,int> getPosition();
       void setPosition(std::pair<int,int> position);

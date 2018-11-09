@@ -67,11 +67,10 @@ void Field::changeCellState(int posX, int posY, CellObjects cellObject){
 
     if (!vectorOfCells[posX][posY].isOccupied()){
          vectorOfCells[posX][posY].occupy();
-    }else{
+    }else if (cellObject != Visited){
           vectorOfCells[posX][posY].release();
           cellObject = Empty;
         }
-
 
     switch(cellObject){
       case 0:
@@ -90,6 +89,10 @@ void Field::changeCellState(int posX, int posY, CellObjects cellObject){
       vectorOfCells[posX][posY].setTexture(Optimal);
       break;
 
+      case 4:
+      vectorOfCells[posX][posY].setTexture(Visited);
+      break;
+
       default:
       std::cerr << "Failed trying to change texture\n";
       break;
@@ -105,17 +108,17 @@ std::vector<Node> Field::calculateChilds(Node* targetNode){
     std::pair<int,int> actualPos = targetNode -> getPosition();
 
     if ((actualPos.first != 0) && (!vectorOfCells[actualPos.first - 1][actualPos.second].isOccupied()))
-        nodeChilds.push_back(Node(std::make_pair(actualPos.first - 1, actualPos.second), 0, targetNode));
+        nodeChilds.push_back(Node(std::make_pair(actualPos.first - 1, actualPos.second), 0, targetNode, false));
 
     if ((actualPos.first != vectorOfCells.size() - 1) && (!vectorOfCells[actualPos.first + 1][actualPos.second].isOccupied()))
-        nodeChilds.push_back(Node(std::make_pair(actualPos.first + 1, actualPos.second), 0, targetNode));
+        nodeChilds.push_back(Node(std::make_pair(actualPos.first + 1, actualPos.second), 0, targetNode, false));
 
 
     if ((actualPos.second != 0) && (!vectorOfCells[actualPos.first][actualPos.second - 1].isOccupied()))
-        nodeChilds.push_back(Node(std::make_pair(actualPos.first, actualPos.second - 1), 0, targetNode));
+        nodeChilds.push_back(Node(std::make_pair(actualPos.first, actualPos.second - 1), 0, targetNode, false));
 
     if ((actualPos.second != vectorOfCells[0].size() - 1) && (!vectorOfCells[actualPos.first][actualPos.second + 1].isOccupied()))
-        nodeChilds.push_back(Node(std::make_pair(actualPos.first, actualPos.second + 1), 0, targetNode));
+        nodeChilds.push_back(Node(std::make_pair(actualPos.first, actualPos.second + 1), 0, targetNode, false));
 
     return nodeChilds;
 }
@@ -164,9 +167,9 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
       while (it != nodeQueue.end()){
         //std::cout << "Iterating\n";
         //std::cout << "It node = ";
-        (*it) -> printInfo();
+        //(*it) -> printInfo();
         //std::cout << "Target node = ";
-        (*targetNode) -> printInfo();
+        //(*targetNode) -> printInfo();
 
         if ( nodesAreEqual((*it),(*targetNode)) ){
              //std::cout << "Erasing\n";
@@ -184,7 +187,7 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
 // TODO Check the boundaries of the field while calculating the childs.
 
 
- std::vector<Cell> Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos){
+ std::list<Node> Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos){
 
   int nodesIterator = 0;
   Node rootNode(initialPos, 0, NULL);
@@ -245,13 +248,13 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
 
 
 
-    std::cout << "----------------------LIST--------------------\n";
+    /*std::cout << "----------------------LIST--------------------\n";
     for (auto node : nodeList)
         std::cout << "NODE POS ( " << node.getPosition().first << " , " << node.getPosition().second << ") \n";
 
     std::cout << "----------------------LIST/QUEUE--------------------\n";
     for (auto node : nodeQueue)
-          std::cout << "NODE POS ( " << node -> getPosition().first << " , " << node -> getPosition().second << ") DATA : "  << node -> getData() << " WEIGHT " << node -> getWeight() <<   "\n";
+          std::cout << "NODE POS ( " << node -> getPosition().first << " , " << node -> getPosition().second << ") DATA : "  << node -> getData() << " WEIGHT " << node -> getWeight() <<   "\n";*/
 
 
   // Front node of the deque will be the actualNode to expand
@@ -263,12 +266,12 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
 
   std::vector<Node*> optimalNodeRoute = actualNode -> getRoute();
 
-  std::vector<Cell> optimalCellRoute;
+  /*std::vector<Cell> optimalCellRoute;
   for (auto node : optimalNodeRoute){
        Cell cell = getCell(node -> getPosition().first, node -> getPosition().second);
        optimalCellRoute.push_back(cell);
-     }
-  return optimalCellRoute;
+     }*/
+  return nodeList;
 
 
 }
