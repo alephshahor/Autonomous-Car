@@ -204,7 +204,7 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
 
 // TODO Check the boundaries of the field while calculating the childs.
 
- Node* Field::findMinimumNode(std::list<Node*>& openList){
+Node* Field::findMinimumNode(std::list<Node*>& openList){
    std::list<Node*>::iterator itMin = openList.begin();
    Node* minimumNode = (*itMin);
 
@@ -221,7 +221,7 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
 
  }
 
- bool Field::lowerEqualExist(std::list<Node*> openList, Node node){
+bool Field::lowerEqualExist(std::list<Node*> openList, Node node){
       Node* targetNode = &node;
       for (std::list<Node*>::iterator it = openList.begin(); it != openList.end(); it++){
           if (((*it) -> getPosition().first == targetNode -> getPosition().first) && ((*it) -> getPosition().second == targetNode -> getPosition().second)){
@@ -234,7 +234,7 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
  }
 
 
- bool Field::lowerEqualExist(std::list<Node> closedList, Node node){
+bool Field::lowerEqualExist(std::list<Node> closedList, Node node){
       for (std::list<Node>::iterator it = closedList.begin(); it != closedList.end(); it++){
           if ((it -> getPosition().first == node.getPosition().first) && (it -> getPosition().second == node.getPosition().second)){
               if (it -> getData() <= node.getData())
@@ -273,8 +273,10 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
      for (auto node: nodeChilds)
           nodeList.push_back(node);
 
+       std::list<Node>::iterator beginning = nodeList.end();
 
-       std::list<Node>::iterator beginning = std::find(nodeList.begin(), nodeList.end(), nodeChilds[0]);
+       if (!nodeChilds.empty())
+       beginning = std::find(nodeList.begin(), nodeList.end(), nodeChilds[0]);
 
        for (std::list<Node>::iterator node = beginning; node != nodeList.end(); node++){
 
@@ -308,83 +310,34 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
 
  }
 
+std::pair<int,int> Field::uniToBidimensional(int rangePos){
 
-/*
- std::list<Node> Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos){
+  int xPos,yPos;
 
-  int nodesIterator = 0;
-  Node rootNode(initialPos, 0, NULL);
-
-  Node* actualNode = &rootNode;
-
-  std::list<Node> nodeList;
-  std::list<Node*> nodeQueue;
-
-  nodeQueue.push_back(actualNode);
-
-  int itCounter =  0;
-
-  // While the actualNode is not the target node.
-  // (actualNode -> getPosition().first != finalPos.first) || (actualNode -> getPosition().second != finalPos.second)
-  while ( (actualNode -> getPosition().first != finalPos.first) || (actualNode -> getPosition().second != finalPos.second)){
-
-  // We calculate actualNode childs
-  std::vector<Node> nodeChilds = calculateChilds(actualNode);
-
-  // We push all the nodes  in the list
-  for (auto node : nodeChilds)
-      nodeList.push_back(node);
-
-
-  // This iterator 'tries' to find the last new node inserted in the nodeList
-  std::list<Node>::iterator listIterator = std::find(nodeList.begin(), nodeList.end(), *(nodeChilds.begin()));
-
-  std::list<Node>::iterator listIterator_ = listIterator;
-
-  for (std::list<Node>::iterator it = listIterator_; it != nodeList.end(); it++){
-    it -> setData(calculateFunction((*it), finalPos));
-    it -> setWeight(it -> getParent() -> getWeight() + 1);
-    actualNode -> setChild(&(*it));
+  if (rangePos < (fieldDimension.first / cellSize)){
+    xPos = 0;
+    yPos = rangePos;
+  }else{
+    xPos = rangePos / (fieldDimension.first / cellSize);
+    yPos = rangePos - ((fieldDimension.first / cellSize) * xPos);
   }
 
+   return std::make_pair(xPos,yPos);
 
-  listIterator_ = listIterator;
 
+}
 
-  // We push in the queue the new nodes.
-  for (std::list<Node>::iterator it = listIterator; it != nodeList.end(); it++){
-      nodeQueue.push_back(&(*it));
+void Field::generateRandomTerrain(int percentage){
+
+  int range = pow((fieldDimension.first / cellSize), 2);
+  int nOccupyCells = (percentage * range) / 100;
+
+  srand((unsigned)time(0));
+  for (int i = 0; i < nOccupyCells; i++){
+    int rangePos = (rand() % range) + 0;
+    std::pair<int,int> targetPosition = uniToBidimensional(rangePos);
+    vectorOfCells[targetPosition.first][targetPosition.second].occupy();
+    vectorOfCells[targetPosition.first][targetPosition.second].setTexture(Obstacle);
   }
 
-  // We actualize the iterator
-  listIterator = nodeList.end();
-
-  // We pop of the queue the current node being explored
-  nodeQueue.pop_front();
-
-
-
-  // We sort the list
-  nodeQueue.sort([](Node* & a, Node* & b) { return a -> getData() < b -> getData(); });
-
-  eliminateDuplicates(nodeQueue);
-
-
-  // Front node of the deque will be the actualNode to expand
-  actualNode = nodeQueue.front();
-
-  //std::cout << "Front node has PosX : " << nodeQueue.front() -> getPosition().first << " PosY: " << nodeQueue.front() -> getPosition().second << " and data: " << nodeQueue.front() -> getData() << "\n";
-  itCounter++;
-  }
-
-  std::vector<Node*> optimalNodeRoute = actualNode -> getRoute();
-
-  std::vector<Cell> optimalCellRoute;
-  for (auto node : optimalNodeRoute){
-       Cell cell = getCell(node -> getPosition().first, node -> getPosition().second);
-       optimalCellRoute.push_back(cell);
-     }
-//  return nodeList;
-
-
-}*/
+}

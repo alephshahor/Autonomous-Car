@@ -4,6 +4,8 @@
 #include <set>
 #include <list>
 #include <stack>
+#include <cstdlib>
+#include <ctime>
 #include "cell.hpp"
 #include "node.hpp"
 
@@ -44,6 +46,10 @@ class Field{
         Node* findMinimumNode(std::list<Node*>& openList);
         bool lowerEqualExist(std::list<Node*> openList, Node node);
         bool lowerEqualExist(std::list<Node> openList, Node node);
+
+        std::pair<int,int> uniToBidimensional(int rangePos);
+        void generateRandomTerrain(int percentage);
+
 
 
 

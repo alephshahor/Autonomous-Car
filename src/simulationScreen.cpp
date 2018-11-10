@@ -21,20 +21,25 @@ int simulationScreen::Run(sf::RenderWindow& window){
 
 std::cout << "Field dimension is " << gFieldDimension.first << " , " << gFieldDimension.second << "\n";
 Field simulationField(gFieldDimension.first,gFieldDimension.second,float(getCellSize()));
-//Field simulationField(20,20,1);
 
-
-std::cout << "I made it\n";
 std::pair<int,int> carDimension = std::make_pair(getCellSize(),getCellSize());
 std::pair<int,int> carPosition = std::make_pair(10,10);
 std::pair<int,int> finalPos = std::make_pair(3,3);
 autonomousCar ferrari(carDimension, carPosition);
+
 CellObjects currentCellObject = Obstacle;
+
 
 bool running = true;
 bool pause = false;
 bool optimalRoute = false;
 bool sequentialMode = false;
+
+simulationField.generateRandomTerrain(40);
+if (simulationField.getCell(carPosition.first, carPosition.second).isOccupied()){
+    simulationField.getCell(carPosition.first, carPosition.second).release();
+    simulationField.getCell(carPosition.first, carPosition.second).setTexture(Empty);
+}
 
 
 display(window, simulationField, ferrari);
@@ -77,6 +82,17 @@ while (running){
                   }
               }
 
+              if (evnt.key.code == sf::Keyboard::Num6){
+                  int percentage;
+                  std::cout << "INTRODUCE THE PERCENTAGE OF OBSTACLES: ";
+                  std::cin >> percentage;
+                  simulationField.generateRandomTerrain(percentage);
+                  if (simulationField.getCell(carPosition.first, carPosition.second).isOccupied()){
+                      simulationField.getCell(carPosition.first, carPosition.second).release();
+                      simulationField.getCell(carPosition.first, carPosition.second).setTexture(Empty);
+                  }
+                }
+
               if (evnt.key.code == sf::Keyboard::Num2){
                   currentCellObject = Obstacle;
                   std::cout << "SELECTED OBJECT: OBSTACLE\n";
@@ -88,26 +104,27 @@ while (running){
                 }
 
              if ((evnt.key.code == sf::Keyboard::Num1) && (!optimalRoute)){
-
+                  std::cout << "CALCULATING OPTIMAL ROUTE\n";
                   optimalRoute = true;
                   std::pair<int,int> carPos = ferrari.getPosition();
                   std::list<Node> cellRoute = simulationField.calculateOptimalRoute(carPos, finalPos);
 
-                  Node* finalNode;
-
-                  if (!sequentialMode){
+                  if ((!sequentialMode) && (!cellRoute.empty())){
+                  Node* finalNode = NULL;
                   for (auto node: cellRoute){
-                    simulationField.changeCellState(node.getPosition().first * gCellSize , node.getPosition().second * gCellSize, Visited);
                     if (node.getPosition().first == finalPos.first && node.getPosition().second == finalPos.second)
                         finalNode = &node;
+                    else simulationField.changeCellState(node.getPosition().first * gCellSize , node.getPosition().second * gCellSize, Visited);
                       }
 
-                  while (finalNode != NULL){
-                      simulationField.changeCellState(finalNode -> getPosition().first * gCellSize , finalNode -> getPosition().second * gCellSize, Optimal);
+                  if (finalNode != NULL)
+                  while (finalNode -> getParent() != NULL){
                       finalNode = finalNode -> getParent();
+                      simulationField.changeCellState(finalNode -> getPosition().first * gCellSize , finalNode -> getPosition().second * gCellSize, Optimal);
                   }
 
-                }else{
+                }else if (!cellRoute.empty()){
+                  Node* finalNode = NULL;
                   for (auto node: cellRoute){
                     if (node.getPosition().first == finalPos.first && node.getPosition().second == finalPos.second)
                         finalNode = &node;
@@ -115,6 +132,7 @@ while (running){
                     display(window, simulationField, ferrari);
                       }
 
+                  if (finalNode != NULL)
                   while (finalNode -> getParent() != NULL){
                       finalNode = finalNode -> getParent();
                       simulationField.changeCellState(finalNode -> getPosition().first * gCellSize , finalNode -> getPosition().second * gCellSize, Optimal);
@@ -126,6 +144,7 @@ while (running){
            }
 
              if (evnt.key.code == sf::Keyboard::Num9){
+                 std::cout << "RESETING FIELD\n";
                  optimalRoute = false;
                  simulationField.reset();
                  ferrari.setPosition(carPosition);
