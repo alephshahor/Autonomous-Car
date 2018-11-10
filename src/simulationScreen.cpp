@@ -10,6 +10,7 @@ Field simulationField(gFieldDimension.first,gFieldDimension.second,float(getCell
 std::cout << "I made it\n";
 std::pair<int,int> carDimension = std::make_pair(getCellSize(),getCellSize());
 std::pair<int,int> carPosition = std::make_pair(10,10);
+std::pair<int,int> finalPos = std::make_pair(3,3);
 autonomousCar ferrari(carDimension, carPosition);
 
 bool running = true;
@@ -44,11 +45,20 @@ while (running){
              if ((evnt.key.code == sf::Keyboard::Num1) && (!optimalRoute)){
 
                   std::pair<int,int> carPos = ferrari.getPosition();
-                  std::list<Node> cellRoute = simulationField.calculateOptimalRoute(carPos, std::make_pair(3,3));
+                  std::list<Node> cellRoute = simulationField.calculateOptimalRoute(carPos, finalPos);
 
-                  for (auto node: cellRoute)
+                  Node* finalNode;
+                  for (auto node: cellRoute){
                     simulationField.changeCellState(node.getPosition().first * gCellSize , node.getPosition().second * gCellSize, Visited);
-                    window.clear();
+                    if (node.getPosition().first == finalPos.first && node.getPosition().second == finalPos.second)
+                        finalNode = &node;
+                      }
+
+                  while (finalNode != NULL){
+                      simulationField.changeCellState(finalNode -> getPosition().first * gCellSize , finalNode -> getPosition().second * gCellSize, Optimal);
+                      finalNode = finalNode -> getParent();
+                  }
+
 
              }
 

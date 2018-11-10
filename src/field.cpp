@@ -67,7 +67,7 @@ void Field::changeCellState(int posX, int posY, CellObjects cellObject){
 
     if (!vectorOfCells[posX][posY].isOccupied()){
          vectorOfCells[posX][posY].occupy();
-    }else if (cellObject != Visited){
+    }else if ((cellObject == Obstacle) || (cellObject == Goal)){
           vectorOfCells[posX][posY].release();
           cellObject = Empty;
         }
@@ -128,12 +128,18 @@ int Field::calculateHeuristic(Node targetNode, std::pair<int,int> finalPos){
 
       std::pair<int,int> nodePos = targetNode.getPosition();
       int heuristicValue = abs(nodePos.first - finalPos.first) + abs(nodePos.second - finalPos.second);
+
       return heuristicValue;
 
 }
 
 int Field::calculateFunction(Node targetNode, std::pair<int,int> finalPos){
-      return calculateHeuristic(targetNode, finalPos) + (targetNode.getParent() -> getWeight() + 1);
+
+      int nodeWeight = 0;
+      if (targetNode.getParent() != NULL)
+          nodeWeight = targetNode.getParent() -> getWeight() + 1;
+
+      return calculateHeuristic(targetNode, finalPos) + nodeWeight;
 }
 
 bool Field::nodesAreEqual(Node* nodeA, Node* nodeB){
@@ -234,11 +240,13 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
    std::list<Node*> closedList;
    std::list<Node*> openList;
 
-   Node rootNode(initialPos, 0, NULL);
+   /*Node rootNode(initialPos, 0, NULL);
    Node* actualNode = &rootNode;
-   openList.push_back(actualNode);
+   openList.push_back(actualNode);*/
 
-   int contador = 0;
+   Node rootNode(initialPos, 0, NULL);
+   nodeList.push_back(rootNode);
+   openList.push_back(&nodeList.front());
 
 
    int iterations = 0;
@@ -260,14 +268,22 @@ void Field::eliminateDuplicates(std::list<Node*>& nodeQueue){
 
        if (node -> getPosition().first == finalPos.first && node -> getPosition().second == finalPos.second){
            notFound = false;
+
            break;
        }else{
+
           node -> setData(calculateFunction((*node), finalPos));
+
+          if (node -> getParent() != NULL)
           node -> setWeight(node -> getParent() -> getWeight() + 1);
+
+
        }
 
        if((!lowerEqualExist(openList, (*node))) && (!lowerEqualExist(closedList, (*node)))){
+
           openList.push_back(&(*node));
+
        }
 
      }
