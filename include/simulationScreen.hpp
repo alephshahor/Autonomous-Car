@@ -14,5 +14,6 @@ class simulationScreen : public cScreen {
 private:
 public:
     virtual int Run(sf::RenderWindow& window);
+    void display(sf::RenderWindow& window, Field simulationField, autonomousCar ferrari);
 
 };

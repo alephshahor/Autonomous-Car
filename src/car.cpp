@@ -60,3 +60,8 @@ void autonomousCar::draw(sf::RenderTarget& target, sf::RenderStates states) cons
 std::pair<int,int> autonomousCar::getPosition(){
       return position;
 }
+
+void autonomousCar::setPosition(std::pair<int,int> position){
+      this -> position = position;
+      carDrawable.setPosition(position.first * dimension.first, position.second * dimension.second);
+}

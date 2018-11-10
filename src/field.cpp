@@ -60,14 +60,25 @@ int Field::getHeight(){
   return fieldDimension.second / cellSize;
 }
 
+void Field::reset(){
+
+  for (int i = 0; i < fieldDimension.first / cellSize; i++){
+      for (int j = 0; j < fieldDimension.second / cellSize; j++){
+        vectorOfCells[i][j].setTexture(Empty);
+        vectorOfCells[i][j].release();
+      }
+  }
+
+}
+
 void Field::changeCellState(int posX, int posY, CellObjects cellObject){
 
     posX /= cellSize;
     posY /= cellSize;
 
-    if (!vectorOfCells[posX][posY].isOccupied()){
+    if (!vectorOfCells[posX][posY].isOccupied() && cellObject != Goal){
          vectorOfCells[posX][posY].occupy();
-    }else if ((cellObject == Obstacle) || (cellObject == Goal)){
+    }else if (cellObject == Obstacle){
           vectorOfCells[posX][posY].release();
           cellObject = Empty;
         }
@@ -83,6 +94,7 @@ void Field::changeCellState(int posX, int posY, CellObjects cellObject){
 
       case 2:
       vectorOfCells[posX][posY].setTexture(Goal);
+      std::cout << "Goal texture setted\n";
       break;
 
       case 3:

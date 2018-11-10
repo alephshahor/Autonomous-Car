@@ -32,6 +32,7 @@ class autonomousCar : public sf::Drawable {
         bool checkLeftCollision(Field simulationField);
 
         std::pair<int,int> getPosition();
+        void setPosition(std::pair<int,int> position);
 
 
 

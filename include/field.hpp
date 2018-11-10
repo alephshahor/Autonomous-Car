@@ -31,6 +31,8 @@ class Field{
         int getWidth();
         int getHeight();
 
+        void reset();
+
         //  This function changes the cell from dead to alive and vice versa
         void changeCellState(int posX, int posY, CellObjects cellObject);
         std::vector<Node> calculateChilds(Node* targetNode);
