@@ -23,8 +23,8 @@ int simulationScreen::Run(sf::RenderWindow& window){
 Field simulationField(gFieldDimension.first,gFieldDimension.second,float(getCellSize()));
 
 std::pair<int,int> carDimension = std::make_pair(getCellSize(),getCellSize());
-std::pair<int,int> carPosition = std::make_pair(10,10);
-std::pair<int,int> finalPos = std::make_pair(3,3);
+std::pair<int,int> carPosition = std::make_pair(6,6);
+std::pair<int,int> finalPos = std::make_pair(1,1);
 autonomousCar ferrari(carDimension, carPosition);
 
 CellObjects currentCellObject = Obstacle;
@@ -35,6 +35,7 @@ bool running = true;
 bool pause = false;
 bool optimalRoute = false;
 bool sequentialMode = false;
+bool goalSelected = false;
 
 /*
 simulationField.generateRandomTerrain(40);
@@ -58,8 +59,15 @@ while (running){
       case sf::Event::MouseButtonPressed:
              if (evnt.mouseButton.button == sf::Mouse::Left)
                  simulationField.changeCellState(evnt.mouseButton.x, evnt.mouseButton.y, currentCellObject);
-             if (currentCellObject == Goal)
+             
+             if ((currentCellObject == Goal) && (goalSelected == true)){
+                 simulationField.changeCellState(finalPos.first * gCellSize ,finalPos.second * gCellSize, Empty);
+                 finalPos = std::make_pair(evnt.mouseButton.x / gCellSize , evnt.mouseButton.y / gCellSize); 
+             }
+             if ((currentCellObject == Goal) && (goalSelected == false)){
                  finalPos = std::make_pair(evnt.mouseButton.x / gCellSize , evnt.mouseButton.y / gCellSize);
+                 goalSelected = true;
+             }
                
 
              display(window, simulationField, ferrari);
