@@ -10,7 +10,7 @@
 #include "initialScreen.hpp"
 #include "simulationScreen.hpp"
 #include "testScreen.hpp"
-
+#include "test.hpp"
 
 struct lex_compare{
   bool operator() (const Node* targetNode1, const Node* targetNode2) const{
@@ -96,21 +96,25 @@ switch(mode){
   }
 }
 
+if(mode == 1){
+  test();
+}else{
 
 
-sf::RenderWindow window(sf::VideoMode(500,500), "Autonomous Car", sf::Style::Close);
+  sf::RenderWindow window(sf::VideoMode(500,500), "Autonomous Car", sf::Style::Close);
 
-std::vector<cScreen*> Screens;
+  std::vector<cScreen*> Screens;
 
 
-simulationScreen screen01;
-testScreen screen02;
+  simulationScreen screen01;
+  testScreen screen02;
 
-Screens.push_back(&screen01);
-Screens.push_back(&screen02);
+  Screens.push_back(&screen01);
+  Screens.push_back(&screen02);
 
-while (screen != -1){
-  screen = Screens[screen] -> Run(window);
+  while (screen != -1){
+    screen = Screens[screen] -> Run(window);
+  }
 }
 
 
