@@ -82,10 +82,9 @@ switch(mode){
   screen = 0;
 
   // For dynamic resizing of simulating mode
-  std::cout << "Please introduce X-axis size\n";
+  std::cout << "Please introduce field size (square)\n";
   std::cin >> posX;
-  std::cout << "Please introduce Y-axis size\n";
-  std::cin >> posY;
+  posY=posX;
   //
 
   break;
@@ -108,24 +107,22 @@ if(mode == 1){
   test();
 }else{
 
-int resX=500, resY=500;
+int resX=500;
+int resY=500;
 
 // For dynamic resizing of simulating mode
 
 if (screen == 0){
-  int resx_=posX * 20;
-  int resy_=posY * 20;
+  int res_=posX * 20;
 
-  if ((resx_ <sf::VideoMode::getDesktopMode().width) && (resy_<sf::VideoMode::getDesktopMode().height)){
-    resX=resx_;
-    resY=resy_;
+  if ((res_ <sf::VideoMode::getDesktopMode().width) && (res_<sf::VideoMode::getDesktopMode().height)){
+    resX=res_;
+    resY=res_;
     setFieldDimension(posX *= 20, posY *= 20);
   }
 
   else  {
     std::cout << "DIMENSIONS OUTSIDE SCREEN SIZE. CAN'T DRAW ENTIRE FIELD\n";
-    posX=25;
-    posY=25;
   }
 }
 ////
