@@ -60,7 +60,7 @@ int screen = 0;
 
 std::cout << "WELCOME TO THE PATHFINDING CAR SIMULATION USING A* ALGORITHM\n";
 std::cout << "CHOOSE BETWEEN: \n";
-std::cout << "[0] AND GRAPHICAL MODE ( SIMULATING )\n";
+std::cout << "[0] GRAPHICAL MODE ( SIMULATING )\n";
 std::cout << "[1] TERMINAL MODE ( TESTING )\n";
 
 int mode = -1;
@@ -80,6 +80,14 @@ switch(mode){
   std::cout << "SIMULATING MODE SELECTED\n";
   unselected = false;
   screen = 0;
+
+  // For dynamic resizing of simulating mode
+  std::cout << "Please introduce X-axis size\n";
+  std::cin >> posX;
+  std::cout << "Please introduce Y-axis size\n";
+  std::cin >> posY;
+  //
+
   break;
   case 1:
   std::cout << "TESTING MODE SELECTED\n";
@@ -97,8 +105,30 @@ switch(mode){
 }
 
 
+int resX=500, resY=500;
 
-sf::RenderWindow window(sf::VideoMode(500,500), "Autonomous Car", sf::Style::Close);
+// For dynamic resizing of simulating mode
+
+if (screen == 0){
+  int resx_=posX * 20;
+  int resy_=posY * 20;
+
+  if ((resx_ <sf::VideoMode::getDesktopMode().width) && (resy_<sf::VideoMode::getDesktopMode().height)){
+    resX=resx_;
+    resY=resy_;
+    setFieldDimension(posX *= 20, posY *= 20);
+  }
+
+  else  {
+    std::cout << "DIMENSIONS OUTSIDE SCREEN SIZE. CAN'T DRAW ENTIRE FIELD\n";
+    posX=25;
+    posY=25;
+  }
+}
+////
+
+
+sf::RenderWindow window(sf::VideoMode(resX,resY), "Autonomous Car", sf::Style::Close);
 
 std::vector<cScreen*> Screens;
 
