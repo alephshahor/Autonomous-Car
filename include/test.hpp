@@ -11,3 +11,6 @@
 #include <ctime>
 
 void test();
+int calculateMean(std::vector<int> v);
+double calculateMean(std::vector<double> v);
+void calculateParameters(int currentDimension, int percentage, int& pathSize, double& cpuTime, int& generatedNodes);
