@@ -19,7 +19,7 @@ void simulationScreen::display(sf::RenderWindow& window, Field simulationField, 
 
 int simulationScreen::Run(sf::RenderWindow& window){
 
-std::cout << "Field dimension is " << gFieldDimension.first << " , " << gFieldDimension.second << "\n";
+//std::cout << "Field dimension is " << gFieldDimension.first << " , " << gFieldDimension.second << "\n";
 Field simulationField(gFieldDimension.first,gFieldDimension.second,float(getCellSize()));
 
 std::pair<int,int> carDimension = std::make_pair(getCellSize(),getCellSize());
@@ -28,6 +28,7 @@ std::pair<int,int> finalPos = std::make_pair(3,3);
 autonomousCar ferrari(carDimension, carPosition);
 
 CellObjects currentCellObject = Obstacle;
+Heuristic currentHeuristic = Euclidean;
 
 
 bool running = true;
@@ -35,11 +36,12 @@ bool pause = false;
 bool optimalRoute = false;
 bool sequentialMode = false;
 
+/*
 simulationField.generateRandomTerrain(40);
 if (simulationField.getCell(carPosition.first, carPosition.second).isOccupied()){
     simulationField.getCell(carPosition.first, carPosition.second).release();
     simulationField.getCell(carPosition.first, carPosition.second).setTexture(Empty);
-}
+}*/
 
 
 display(window, simulationField, ferrari);
@@ -58,6 +60,8 @@ while (running){
                  simulationField.changeCellState(evnt.mouseButton.x, evnt.mouseButton.y, currentCellObject);
              if (currentCellObject == Goal)
                  finalPos = std::make_pair(evnt.mouseButton.x / gCellSize , evnt.mouseButton.y / gCellSize);
+               
+
              display(window, simulationField, ferrari);
              break;
       case sf::Event::KeyPressed:
@@ -91,6 +95,10 @@ while (running){
                       simulationField.getCell(carPosition.first, carPosition.second).release();
                       simulationField.getCell(carPosition.first, carPosition.second).setTexture(Empty);
                   }
+                  if (simulationField.getCell(finalPos.first, finalPos.second).isOccupied()){
+                      simulationField.getCell(finalPos.first, finalPos.second).release();
+                      simulationField.getCell(finalPos.first, finalPos.second).setTexture(Empty);
+                  }
                 }
 
               if (evnt.key.code == sf::Keyboard::Num2){
@@ -103,11 +111,30 @@ while (running){
                   std::cout << "SELECTED OBJECT: GOAL\n";
                 }
 
+              if (evnt.key.code == sf::Keyboard::Num7){
+                  if (currentHeuristic == Euclidean){
+                      std::cout << "SELECTED HEURISTIC FUNCTION: MANHATTAN\n";
+                      currentHeuristic = Manhattan;
+                 }else {
+                      std::cout << "SELECTED HEURISTIC FUNCTION: EUCLIDEAN\n";
+                      currentHeuristic = Euclidean;
+                  }
+                }
+
+                if (evnt.key.code == sf::Keyboard::Num0){
+                    std::cout << "CREATING RANDOM GOAL\n";
+                    std::pair<int,int> randomGoal = simulationField.generateRandomGoal();
+                    simulationField.changeCellState(randomGoal.first * gCellSize,randomGoal.second * gCellSize, Goal);
+                    finalPos = randomGoal;
+                  }
+
              if ((evnt.key.code == sf::Keyboard::Num1) && (!optimalRoute)){
                   std::cout << "CALCULATING OPTIMAL ROUTE\n";
                   optimalRoute = true;
                   std::pair<int,int> carPos = ferrari.getPosition();
-                  std::list<Node> cellRoute = simulationField.calculateOptimalRoute(carPos, finalPos);
+                  int generatedNodes = 0;
+                  std::list<Node> cellRoute = simulationField.calculateOptimalRoute(carPos, finalPos, generatedNodes, currentHeuristic);
+                  std::cout << "NUMBER OF GENERATED NODES: " << generatedNodes << "\n";
 
                   if ((!sequentialMode) && (!cellRoute.empty())){
                   Node* finalNode = NULL;

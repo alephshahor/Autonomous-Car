@@ -2,6 +2,7 @@
 
 std::pair<int,int> gFieldDimension = std::make_pair(1,1);
 int gCellSize = 0;
+Heuristic gHeuristic = Euclidean;
 
 
 void setFieldDimension(int x, int y){

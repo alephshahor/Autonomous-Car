@@ -9,6 +9,7 @@
 #include "cScreen.hpp"
 #include "initialScreen.hpp"
 #include "simulationScreen.hpp"
+#include "testScreen.hpp"
 
 
 struct lex_compare{
@@ -17,44 +18,96 @@ struct lex_compare{
   }
 };
 
+Heuristic selectHeuristicFunction(){
 
+  std::cout << "SELECT HEURISTIC FUNCTION:\n";
+  std::cout << "[0] MANHATTAN\n";
+  std::cout << "[1] EUCLIDEAN\n";
+  int hFunction = -1;
+  std::cin >> hFunction;
+
+  Heuristic heuristicFunction;
+  bool unselected = true;
+  while (unselected){
+    switch(hFunction){
+        case 0:
+        std::cout << "MANHATTAN FUNCTION SELECTED\n";
+        unselected = false;
+        heuristicFunction = Manhattan;
+        break;
+        case 1:
+        std::cout << "EUCLIDEAN FUNCTION SELECTED\n";
+        unselected = false;
+        heuristicFunction = Euclidean;
+        break;
+        default:
+        std::cout << "SORRY, YOU'VE CHOSEN A NON VALID OPTION, PLEASE TRY AGAIN\n";
+        std::cout << "[0] MANHATTAN\n";
+        std::cout << "[1] EUCLIDEAN\n";
+        break;
+    }
+
+  }
+
+  return heuristicFunction;
+
+}
 
 int main(){
 
-
-int posX, posY;
-std::cout << "Introduce field X-AXIS dimension: ";
-std::cin >> posX;
-std::cout << "Y-AXIS dimension: ";
-std::cin >> posY;
+int screen = 0;
 
 
-if ((posX == posY) && (posX <= 100)){
-  posX *= 20;
-  posY *= 20;
-  setCellSize(20);
-}else if ((posX == posY) && (posX > 100)){
-  posX *= 10;
-  posY *= 10;
-  setCellSize(10);
+std::cout << "WELCOME TO THE PATHFINDING CAR SIMULATION USING A* ALGORITHM\n";
+std::cout << "CHOOSE BETWEEN: \n";
+std::cout << "[0] AND GRAPHICAL MODE ( SIMULATING )\n";
+std::cout << "[1] TERMINAL MODE ( TESTING )\n";
+
+int mode = -1;
+bool unselected = true;
+int posX = 25;
+int posY = 25;
+setCellSize(20);
+setFieldDimension(posX *= 20, posY *= 20);
+
+
+while (unselected){
+
+  std::cin >> mode;
+
+switch(mode){
+  case 0:
+  std::cout << "SIMULATING MODE SELECTED\n";
+  unselected = false;
+  screen = 0;
+  break;
+  case 1:
+  std::cout << "TESTING MODE SELECTED\n";
+  unselected = false;
+  gHeuristic = selectHeuristicFunction();
+  screen = 1;
+  break;
+  default:
+  std::cout << "SORRY SELECTED MODE IS NOT A VALID MODE, PLEASE TRY AGAIN: \n";
+  std::cout << "[0] TERMINAL MODE ( TESTING )\n";
+  std::cout << "[1] AND GRAPHICAL MODE ( SIMULATING )\n";
+  break;
+
+  }
 }
 
-
-
-ceil(posX);
-ceil(posY);
-
-setFieldDimension(posX, posY);
 
 
 sf::RenderWindow window(sf::VideoMode(500,500), "Autonomous Car", sf::Style::Close);
 
 std::vector<cScreen*> Screens;
 
-simulationScreen screen01;
-Screens.push_back(&screen01);
 
-int screen = 0;
+simulationScreen screen01;
+testScreen screen02;
+
+Screens.push_back(&screen01);
+Screens.push_back(&screen02);
 
 while (screen != -1){
   screen = Screens[screen] -> Run(window);

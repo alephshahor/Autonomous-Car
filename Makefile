@@ -17,7 +17,7 @@ $(BIN)/$(TARGET) : $(OBJECT)
 
 # -c "Compile but not link"
 $(BIN)/%.o : $(SRC)/%.cpp
-				$(CXX) $(CFLAGS) -c $< -o $@
+				$(CXX) $(CFLAGS) -c -gstabs $< -o $@
 
 .PHONY: help run clean
 

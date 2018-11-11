@@ -38,9 +38,9 @@ class Field{
         //  This function changes the cell from dead to alive and vice versa
         void changeCellState(int posX, int posY, CellObjects cellObject);
         std::vector<Node> calculateChilds(Node* targetNode);
-        int calculateHeuristic(Node targetNode, std::pair<int,int> finalPos);
-        int calculateFunction(Node targetNode, std::pair<int,int> finalPos);
-        std::list<Node> calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos);
+        int calculateHeuristic(Node targetNode, std::pair<int,int> finalPos, Heuristic heuristicFunction);
+        int calculateFunction(Node targetNode, std::pair<int,int> finalPos, Heuristic heuristicFunction);
+        std::list<Node> calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos, int& generatedNodes, Heuristic heuristicFunction);
         bool nodesAreEqual(Node* nodeA, Node* nodeB);
         void eliminateDuplicates(std::list<Node*>& nodeQueue);
         Node* findMinimumNode(std::list<Node*>& openList);
@@ -49,6 +49,7 @@ class Field{
 
         std::pair<int,int> uniToBidimensional(int rangePos);
         void generateRandomTerrain(int percentage);
+        std::pair<int,int> generateRandomGoal();
 
 
 

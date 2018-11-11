@@ -81,7 +81,9 @@ void Field::changeCellState(int posX, int posY, CellObjects cellObject){
     }else if (cellObject == Obstacle){
           vectorOfCells[posX][posY].release();
           cellObject = Empty;
-        }
+    }else if (cellObject == Goal){
+          vectorOfCells[posX][posY].release();
+    }
 
     switch(cellObject){
       case 0:
@@ -94,7 +96,6 @@ void Field::changeCellState(int posX, int posY, CellObjects cellObject){
 
       case 2:
       vectorOfCells[posX][posY].setTexture(Goal);
-      std::cout << "Goal texture setted\n";
       break;
 
       case 3:
@@ -136,22 +137,34 @@ std::vector<Node> Field::calculateChilds(Node* targetNode){
 }
 
 
-int Field::calculateHeuristic(Node targetNode, std::pair<int,int> finalPos){
+int Field::calculateHeuristic(Node targetNode, std::pair<int,int> finalPos, Heuristic heuristicFunction){
 
       std::pair<int,int> nodePos = targetNode.getPosition();
-      int heuristicValue = abs(nodePos.first - finalPos.first) + abs(nodePos.second - finalPos.second);
+      int heuristicValue = 0;
+
+      switch(heuristicFunction){
+        case 0:
+        heuristicValue = abs(nodePos.first - finalPos.first) + abs(nodePos.second - finalPos.second);
+        break;
+        case 1:
+        heuristicValue = sqrt(pow(abs(nodePos.first - finalPos.first),2) + pow(abs(nodePos.second - finalPos.second),2));
+        break;
+        default:
+        std::cout << "Failed to calculate Heuristic Function\n";
+        break;
+      }
 
       return heuristicValue;
 
 }
 
-int Field::calculateFunction(Node targetNode, std::pair<int,int> finalPos){
+int Field::calculateFunction(Node targetNode, std::pair<int,int> finalPos, Heuristic heuristicFunction){
 
       int nodeWeight = 0;
       if (targetNode.getParent() != NULL)
           nodeWeight = targetNode.getParent() -> getWeight() + 1;
 
-      return calculateHeuristic(targetNode, finalPos) + nodeWeight;
+      return calculateHeuristic(targetNode, finalPos, heuristicFunction) + nodeWeight;
 }
 
 bool Field::nodesAreEqual(Node* nodeA, Node* nodeB){
@@ -246,7 +259,7 @@ bool Field::lowerEqualExist(std::list<Node> closedList, Node node){
  }
 
 
- std::list<Node> Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos){
+ std::list<Node> Field::calculateOptimalRoute(std::pair<int,int> initialPos, std::pair<int,int> finalPos, int& generatedNodes, Heuristic heuristicFunction){
 
    std::list<Node> nodeList;
    std::list<Node*> closedList;
@@ -273,6 +286,7 @@ bool Field::lowerEqualExist(std::list<Node> closedList, Node node){
      for (auto node: nodeChilds)
           nodeList.push_back(node);
 
+
        std::list<Node>::iterator beginning = nodeList.end();
 
        if (!nodeChilds.empty())
@@ -286,7 +300,7 @@ bool Field::lowerEqualExist(std::list<Node> closedList, Node node){
            break;
        }else{
 
-          node -> setData(calculateFunction((*node), finalPos));
+          node -> setData(calculateFunction((*node), finalPos, heuristicFunction));
 
           if (node -> getParent() != NULL)
           node -> setWeight(node -> getParent() -> getWeight() + 1);
@@ -305,6 +319,8 @@ bool Field::lowerEqualExist(std::list<Node> closedList, Node node){
 
         iterations++;
    }
+
+        generatedNodes = nodeList.size();
 
      return nodeList;
 
@@ -339,5 +355,15 @@ void Field::generateRandomTerrain(int percentage){
     vectorOfCells[targetPosition.first][targetPosition.second].occupy();
     vectorOfCells[targetPosition.first][targetPosition.second].setTexture(Obstacle);
   }
+
+}
+
+
+std::pair<int,int> Field::generateRandomGoal(){
+
+  int range = pow((fieldDimension.first / cellSize), 2);
+  int rangePos = (rand() % range) + 0;
+  std::pair<int,int> goalPosition = uniToBidimensional(rangePos);
+  return goalPosition;
 
 }
