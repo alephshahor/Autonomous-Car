@@ -79,6 +79,15 @@ int nTest = 10;
 while (running){
 
   int printingCounter = 0;
+  std::cout << "\n\n";
+  std::cout << std::left << std::setfill(' ') << "  "
+            << std::setw(11) << "DIMENSION"
+            << std::setw(11) << "OBSTACLES"
+            << std::setw(13) << "PATH_LENGHT"
+            << std::setw(10) << "CPU_TIME"
+            << std::setw(17) << "GENERATED_NODES"
+            << std::setw(11) << "SUCCESS_RATIO" << "\n";
+
   for (int percentage = 10; percentage < 55; percentage += 5){
 
     std::vector<int> vPath;
@@ -86,19 +95,13 @@ while (running){
     std::vector<double> vCpuTime;
     std::vector<bool> vSuccess;
 
-    std::cout << "\n\n-------------------------------------------------------\n";
-    std::cout << "CURRENT DIMENSION -> " << currentDimension << " x " << currentDimension << "\n";
-    std::cout << "CURRENT PERCENTAGE -> " << percentage + printingCounter << "%"<<"\n";
-    std::cout << "NUMBER OF TEST -> " << nTest << "\n";
 
     for (int test = 0; test < nTest ; test++){
       int pathSize = 0;
       double cpuTime = 0.0f;
       int generatedNodes = 0;
       vSuccess.push_back(calculateParameters(currentDimension,percentage,pathSize,cpuTime,generatedNodes));
-      /*std::cout << "PATH -> " << pathSize << "\n";
-      std::cout << "GENERATED NODES -> " << generatedNodes << "\n";
-      std::cout << "CPU TIME -> " << cpuTime << "\n";*/
+
       if (pathSize != 0)
       vPath.push_back(pathSize);
       if (generatedNodes != 0.0)
@@ -108,26 +111,17 @@ while (running){
 
     }
 
+    std::cout << std::left << std::setfill(' ') << "    "
+              << currentDimension << "x"
+              << std::setw(9) << currentDimension
+              << percentage + printingCounter
+              << std::setw(10) << "%"
+              << std::setw(10) << calculateMean(vPath)
+              << std::setw(15) << calculateMean(vCpuTime)
+              << std::setw(15) << calculateMean(vGeneratedNodes)
+              << calculateSuccess(vSuccess) << "/" << vSuccess.size() << "\n";
+
     printingCounter += 5;
-
-    if(vPath.size() != 0){
-      std::cout << "PATHSIZE -> " << calculateMean(vPath) << "\n";
-      std::cout << "CPU TIME -> " << calculateMean(vCpuTime) << "\n";
-      std::cout << "GENERATED NODES -> " << calculateMean(vGeneratedNodes) << "\n";
-      std::cout << "SUCCESS RATIO -> " << calculateSuccess(vSuccess) << " / " << vSuccess.size() << "\n";
-    }else std::cout << "NO PATHS FOUNDED\n";
-
-    /*
-    if (vPath.size() > 0)
-    std::cout << "PATHSIZE -> " << calculateMean(vPath) << "\n";
-    else std::cout << "NO PATHS FOUNDED\n";
-
-    if (vCpuTime.size() != 0)
-    std::cout << "CPU TIME -> " << calculateMean(vCpuTime) << "\n";
-
-    if (vGeneratedNodes.size() != 0)
-    std::cout << "GENERATED NODES -> " << calculateMean(vGeneratedNodes) << "\n";
-    */
 
   }
   std::cout << "\n\n..............................................................................\n";
