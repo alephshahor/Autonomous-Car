@@ -76,7 +76,7 @@ void Field::changeCellState(int posX, int posY, CellObjects cellObject){
     posX /= cellSize;
     posY /= cellSize;
 
-    if (!vectorOfCells[posX][posY].isOccupied() && cellObject != Goal){
+    if (!vectorOfCells[posX][posY].isOccupied() && cellObject != Goal && cellObject != Empty){
          vectorOfCells[posX][posY].occupy();
     }else if (cellObject == Obstacle){
           vectorOfCells[posX][posY].release();
