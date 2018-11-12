@@ -9,7 +9,6 @@
 #include "cScreen.hpp"
 #include "initialScreen.hpp"
 #include "simulationScreen.hpp"
-#include "testScreen.hpp"
 #include "test.hpp"
 
 struct lex_compare{
@@ -134,10 +133,8 @@ sf::RenderWindow window(sf::VideoMode(resX,resY), "Autonomous Car", sf::Style::C
 
 
   simulationScreen screen01;
-  testScreen screen02;
 
   Screens.push_back(&screen01);
-  Screens.push_back(&screen02);
 
   while (screen != -1){
     screen = Screens[screen] -> Run(window);
