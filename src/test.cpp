@@ -1,6 +1,6 @@
 #include "test.hpp"
 
-void calculateParameters(int currentDimension, int percentage, int& pathSize, double& cpuTime, int& generatedNodes){
+bool calculateParameters(int currentDimension, int percentage, int& pathSize, double& cpuTime, int& generatedNodes){
   Field simulationField(currentDimension * gCellSize, currentDimension * gCellSize, float(getCellSize()));
   std::pair<int,int> carDimension = std::make_pair(getCellSize(),getCellSize());
   std::pair<int,int> carPosition = std::make_pair(10,10);
@@ -41,22 +41,34 @@ void calculateParameters(int currentDimension, int percentage, int& pathSize, do
         finalNode = finalNode -> getParent();
       }
     }
+
+  if (finalNode != NULL)
+      return true;
+  else return false;
+
   }
 
 int calculateMean(std::vector<int> v){
   int sum = 0;
   for (auto element: v)
        sum += element;
-  return (sum /= v.size());
+  return (sum / v.size());
 }
 
 double calculateMean(std::vector<double> v){
   double sum = 0;
   for (auto element: v)
        sum += element;
-  return (sum /= v.size());
+  return (sum / v.size());
 }
 
+int calculateSuccess(std::vector<bool> v){
+  int sum = 0;
+  for (auto element: v)
+      if (element)
+          sum++;
+  return sum;
+}
 
 void test(){
 
@@ -66,31 +78,56 @@ int nTest = 10;
 
 while (running){
 
-  for (int percentage = 10; percentage < 100; percentage += 10){
+  int printingCounter = 0;
+  for (int percentage = 10; percentage < 55; percentage += 5){
 
     std::vector<int> vPath;
     std::vector<int> vGeneratedNodes;
     std::vector<double> vCpuTime;
+    std::vector<bool> vSuccess;
 
     std::cout << "\n\n-------------------------------------------------------\n";
     std::cout << "CURRENT DIMENSION -> " << currentDimension << " x " << currentDimension << "\n";
-    std::cout << "CURRENT PERCENTAGE -> " << percentage << "\n";
+    std::cout << "CURRENT PERCENTAGE -> " << percentage + printingCounter << "%"<<"\n";
     std::cout << "NUMBER OF TEST -> " << nTest << "\n";
 
     for (int test = 0; test < nTest ; test++){
       int pathSize = 0;
       double cpuTime = 0.0f;
       int generatedNodes = 0;
-      calculateParameters(currentDimension,percentage,pathSize,cpuTime,generatedNodes);
+      vSuccess.push_back(calculateParameters(currentDimension,percentage,pathSize,cpuTime,generatedNodes));
+      /*std::cout << "PATH -> " << pathSize << "\n";
+      std::cout << "GENERATED NODES -> " << generatedNodes << "\n";
+      std::cout << "CPU TIME -> " << cpuTime << "\n";*/
+      if (pathSize != 0)
       vPath.push_back(pathSize);
+      if (generatedNodes != 0.0)
       vGeneratedNodes.push_back(generatedNodes);
+      if (pathSize != 0)
       vCpuTime.push_back(cpuTime);
+
     }
 
-    std::cout << "PATHSIZE -> " << calculateMean(vPath) << "\n";
-    std::cout << "CPU TIME -> " << calculateMean(vCpuTime) << "\n";
-    std::cout << "GENERATED NODES -> " << calculateMean(vGeneratedNodes) << "\n";
+    printingCounter += 5;
 
+    if(vPath.size() != 0){
+      std::cout << "PATHSIZE -> " << calculateMean(vPath) << "\n";
+      std::cout << "CPU TIME -> " << calculateMean(vCpuTime) << "\n";
+      std::cout << "GENERATED NODES -> " << calculateMean(vGeneratedNodes) << "\n";
+      std::cout << "SUCCESS RATIO -> " << calculateSuccess(vSuccess) << " / " << vSuccess.size() << "\n";
+    }else std::cout << "NO PATHS FOUNDED\n";
+
+    /*
+    if (vPath.size() > 0)
+    std::cout << "PATHSIZE -> " << calculateMean(vPath) << "\n";
+    else std::cout << "NO PATHS FOUNDED\n";
+
+    if (vCpuTime.size() != 0)
+    std::cout << "CPU TIME -> " << calculateMean(vCpuTime) << "\n";
+
+    if (vGeneratedNodes.size() != 0)
+    std::cout << "GENERATED NODES -> " << calculateMean(vGeneratedNodes) << "\n";
+    */
 
   }
   std::cout << "\n\n..............................................................................\n";
