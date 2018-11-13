@@ -265,10 +265,6 @@ bool Field::lowerEqualExist(std::list<Node> closedList, Node node){
    std::list<Node*> closedList;
    std::list<Node*> openList;
 
-   /*Node rootNode(initialPos, 0, NULL);
-   Node* actualNode = &rootNode;
-   openList.push_back(actualNode);*/
-
    Node rootNode(initialPos, 0, NULL);
    nodeList.push_back(rootNode);
    openList.push_back(&nodeList.front());
@@ -278,9 +274,10 @@ bool Field::lowerEqualExist(std::list<Node> closedList, Node node){
    bool notFound = true;
    while(!openList.empty() && notFound){
 
-
+     // Find the minimum node and pops it out of the open list
      Node* minimumNode = findMinimumNode(openList);
 
+     // Calculate its childs
      std::vector<Node> nodeChilds = calculateChilds(minimumNode);
 
      for (auto node: nodeChilds)
@@ -289,17 +286,18 @@ bool Field::lowerEqualExist(std::list<Node> closedList, Node node){
 
        std::list<Node>::iterator beginning = nodeList.end();
 
+      // For every child calculated
        if (!nodeChilds.empty())
        beginning = std::find(nodeList.begin(), nodeList.end(), nodeChilds[0]);
 
        for (std::list<Node>::iterator node = beginning; node != nodeList.end(); node++){
-
+       // If it founds the target node, stop searching.
        if (node -> getPosition().first == finalPos.first && node -> getPosition().second == finalPos.second){
            notFound = false;
 
            break;
        }else{
-
+         // Otherwise set its data and parent to the current minimum node
           node -> setData(calculateFunction((*node), finalPos, heuristicFunction));
 
           if (node -> getParent() != NULL)
@@ -307,7 +305,7 @@ bool Field::lowerEqualExist(std::list<Node> closedList, Node node){
 
 
        }
-
+       // If it doesn't exist a similar node in the open / closed list, push it into the open list.
        if((!lowerEqualExist(openList, (*node))) && (!lowerEqualExist(closedList, (*node)))){
 
           openList.push_back(&(*node));
@@ -315,12 +313,14 @@ bool Field::lowerEqualExist(std::list<Node> closedList, Node node){
        }
 
      }
+      // Push the current minimum node into the closed list
         closedList.push_back(minimumNode);
 
         iterations++;
    }
 
-        generatedNodes = nodeList.size();
+    // This variable holds the number of nodes generated
+    generatedNodes = nodeList.size();
 
      return nodeList;
 
